@@ -1,2 +1,2 @@
-# thingpilot_sara_n2
-Handles communication with the thingpilot data platform API utilising the UBLOX SARA N2 NB-IoT modem
+# sara_n2_driver
+A driver for the u-blox SARA N2 NB-IoT module
