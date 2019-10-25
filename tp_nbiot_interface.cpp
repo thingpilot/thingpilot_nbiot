@@ -12,7 +12,9 @@
 
 
 #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0)
-TP_NBIoT_Interface::TP_NBIoT_Interface() 
+TP_NBIoT_Interface::TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, PinName rst, 
+					       			   PinName vint, PinName gpio, int baud) :
+									   _modem(txu, rxu, cts, rst, vint, gpio, baud)	  
 {
 
 }
