@@ -23,7 +23,7 @@ TP_NBIoT_Interface::TP_NBIoT_Interface()
 TP_NBIoT_Interface::~TP_NBIoT_Interface()
 {
 	#if defined (_COMMS_DRIVER) && (_COMMS_DRIVER == SARAN2)
-    
+    _modem.~SaraN2();
     #endif /* #if defined (_COMMS_DRIVER) && (_COMMS_DRIVER == SARAN2) */
 }
 
