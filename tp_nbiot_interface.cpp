@@ -11,21 +11,21 @@
 #include "tp_nbiot_interface.h"
 
 
-#if defined (BOARD) && (BOARD == WRIGHT_V1_0_0)
+#if defined (BOARD) && (BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0)
 TP_NBIoT_Interface::TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, PinName rst, 
 					       			   PinName vint, PinName gpio, int baud) :
                                        _modem(txu, rxu, cts, rst, vint, gpio, baud) 
 {
 
 }
-#endif /* #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0) */
+#endif /* #if defined (BOARD) && (BOARD == ...) */
 
 
 
 TP_NBIoT_Interface::~TP_NBIoT_Interface()
 {
-	#if defined (_COMMS_DRIVER) && (_COMMS_DRIVER == SARAN2)
+	#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
     _modem.~SaraN2();
-    #endif /* #if defined (_COMMS_DRIVER) && (_COMMS_DRIVER == SARAN2) */
+    #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 }
 
