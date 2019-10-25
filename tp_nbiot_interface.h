@@ -27,6 +27,11 @@ class TP_NBIoT_Interface
 
 	public:
 
+		enum
+		{
+			NBIOT_OK = 0
+		};
+
 	    #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0)
 		/** Constructor for the TP_NBIoT_Interface class, specifically when 
 		 *  using a ublox Sara N2xx. Instantiates an ATCmdParser object
@@ -46,6 +51,8 @@ class TP_NBIoT_Interface
 		#endif /* #if defined (BOARD) && (BOARD == ...) */
 
 		~TP_NBIoT_Interface();
+
+		int configure_coap(char *ipv4, uint16_t port, char *uri);
 
 	private:
 
