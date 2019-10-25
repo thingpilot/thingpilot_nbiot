@@ -11,15 +11,19 @@
 #include "tp_nbiot_interface.h"
 
 
-TP_NBIoT::TP_NBIoT_Interface() 
+#if defined (BOARD) && (BOARD == WRIGHT_V1_0_0)
+TP_NBIoT_Interface::TP_NBIoT_Interface() 
 {
 
 }
+#endif /* #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0) */
 
 
 
 TP_NBIoT_Interface::~TP_NBIoT_Interface()
 {
-
+	#if defined (_COMMS_DRIVER) && (_COMMS_DRIVER == SARAN2)
+    
+    #endif /* #if defined (_COMMS_DRIVER) && (_COMMS_DRIVER == SARAN2) */
 }
 
