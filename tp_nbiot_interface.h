@@ -66,13 +66,13 @@ class TP_NBIoT_Interface
          */
 		int configure_coap(char *ipv4, uint16_t port, char *uri);
 
-		int coap_get_request(char *recv_data);
+		int coap_get(char *recv_data);
 
-		int coap_delete_request();
+		int coap_delete(char *recv_data);
 
-		int coap_put_request(char *send_data, char *recv_data, int data_indentifier);
+		int coap_put(char *send_data, char *recv_data, int data_indentifier);
 
-		int coap_post_request(char *send_data, char *recv_data, int data_indentifier);
+		int coap_post(char *send_data, char *recv_data, int data_indentifier);
 
 
 	private:

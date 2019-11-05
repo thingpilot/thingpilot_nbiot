@@ -95,26 +95,106 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri)
 }
 
 
-int TP_NBIoT_Interface::coap_get_request(char *recv_data)
+int TP_NBIoT_Interface::coap_get(char *recv_data)
 {
+	int status = -1;
+
+	status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
+	status = _modem.select_coap_at_interface();
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
+	status = _modem.coap_get(recv_data);
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
 	return TP_NBIoT_Interface::NBIOT_OK;
 }
 
 
-int TP_NBIoT_Interface::coap_delete_request()
+int TP_NBIoT_Interface::coap_delete()
 {
+	int status = -1;
+
+	status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
+	status = _modem.select_coap_at_interface();
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
+	status = _modem.coap_delete(recv_data);
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
 	return TP_NBIoT_Interface::NBIOT_OK;
 }
 
 
-int TP_NBIoT_Interface::coap_put_request(char *send_data, char *recv_data, int data_indentifier)
+int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_indentifier)
 {
+	int status = -1;
+
+	status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
+	status = _modem.select_coap_at_interface();
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
+	status = _modem.coap_put(send_data, recv_data, data_indentifier);
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
 	return TP_NBIoT_Interface::NBIOT_OK;
 }
 
 
-int TP_NBIoT_Interface::coap_post_request(char *send_data, char *recv_data, int data_indentifier)
+int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_indentifier)
 {
+	int status = -1;
+
+	status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
+	status = _modem.select_coap_at_interface();
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
+	status = _modem.coap_post(send_data, recv_data, data_indentifier);
+	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	{
+		return status;
+	}
+
 	return TP_NBIoT_Interface::NBIOT_OK;
 }
 
