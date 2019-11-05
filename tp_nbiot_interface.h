@@ -50,9 +50,21 @@ class TP_NBIoT_Interface
 
 		#endif /* #if defined (BOARD) && (BOARD == ...) */
 
+        /** Destructor for the TP_NBIoT_Interface class
+         */
 		~TP_NBIoT_Interface();
 
-		int configure_coap(char *ipv4, uint16_t port, char *uri);
+        /** Configure CoAP profile 0 with a given IP address, port and URI
+         *
+         * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 
+         *              destination server as a string, for example:
+         *              char ipv4[] = "168.134.102.18"; 
+         * @param port Destination server port
+         * @param *uri Pointer to a byte array storing the URI, for example:
+         *             char uri[] = "http://coap.me:5683/sink";
+         * @return Indicates success or failure reason
+         */
+		 int configure_coap(char *ipv4, uint16_t port, char *uri);
 
 	private:
 
