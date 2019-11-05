@@ -94,3 +94,27 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri)
 	return TP_NBIoT_Interface::NBIOT_OK;
 }
 
+
+int TP_NBIoT_Interface::coap_get_request(char *recv_data)
+{
+	return TP_NBIoT_Interface::NBIOT_OK;
+}
+
+
+int TP_NBIoT_Interface::coap_delete_request()
+{
+	return TP_NBIoT_Interface::NBIOT_OK;
+}
+
+
+int TP_NBIoT_Interface::coap_put_request(char *send_data, char *recv_data, int data_indentifier)
+{
+	return TP_NBIoT_Interface::NBIOT_OK;
+}
+
+
+int TP_NBIoT_Interface::coap_post_request(char *send_data, char *recv_data, int data_indentifier)
+{
+	return TP_NBIoT_Interface::NBIOT_OK;
+}
+
