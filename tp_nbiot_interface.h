@@ -29,7 +29,13 @@ class TP_NBIoT_Interface
 
 		enum
 		{
-			NBIOT_OK = 0
+			SARA_NXX = 0
+		};
+
+		enum
+		{
+			NBIOT_OK         = 0,
+			DRIVER_UNKNOWN   = 40
 		};
 
 	    #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0)
@@ -80,6 +86,8 @@ class TP_NBIoT_Interface
 		#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
 		SaraN2 _modem;
 		#endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
+
+		int _driver = -1;
 };
 
 
