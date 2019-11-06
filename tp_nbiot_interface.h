@@ -88,7 +88,11 @@ class TP_NBIoT_Interface
 		SaraN2 _modem;
 		#endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 
-		int _driver;
+		#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
+		int _driver = TP_NBIoT_Interface::SARAN2;
+		#else 
+		int _driver = TP_NBIoT_Interface::UNDEFINED;
+		#endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 };
 
 

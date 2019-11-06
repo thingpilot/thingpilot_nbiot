@@ -28,11 +28,7 @@ TP_NBIoT_Interface::TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, Pi
 					       			   PinName vint, PinName gpio, int baud) :
                                        _modem(txu, rxu, cts, rst, vint, gpio, baud) 
 {
-	#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
-    _driver = TP_NBIoT_Interface::SARAN2;
-	#else 
-	_driver = TP_NBIoT_Interface::UNDEFINED;
-    #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
+	
 }
 #endif /* #if defined (BOARD) && (BOARD == ...) */
 
