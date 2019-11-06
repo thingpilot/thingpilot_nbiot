@@ -28,7 +28,7 @@ TP_NBIoT_Interface::TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, Pi
 					       			   PinName vint, PinName gpio, int baud) :
                                        _modem(txu, rxu, cts, rst, vint, gpio, baud) 
 {
-
+	
 }
 #endif /* #if defined (BOARD) && (BOARD == ...) */
 
@@ -55,42 +55,205 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri)
 {
 	int status = -1;
 
-	status = _modem.select_profile(SaraN2::COAP_PROFILE_0);
-	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
-		return status;
+		status = _modem.select_profile(SaraN2::COAP_PROFILE_0);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.set_coap_ip_port(ipv4, port);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.set_coap_uri(uri);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.pdu_header_add_uri_path();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.set_profile_validity(SaraN2::PROFILE_VALID);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.save_profile(SaraN2::COAP_PROFILE_0);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
 	}
 
-	status = _modem.set_coap_ip_port(ipv4, port);
-	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Perform a HTTP GET request over CoAP and capture the server
+ *  response in recv_data
+ *
+ * @param *recv_data Pointer to a byte array that will be populated
+ *              	 with the response from the server
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::coap_get(char *recv_data)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
-		return status;
+		status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.select_coap_at_interface();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.coap_get(recv_data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+	
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Perform a HTTP DELETE request over CoAP and capture the server
+ *  response in recv_data
+ *
+ * @param *recv_data Pointer to a byte array that will be populated
+ *              	 with the response from the server
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::coap_delete(char *recv_data)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.select_coap_at_interface();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.coap_delete(recv_data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+	
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Perform a PUT request using CoAP and save the returned 
+ *  data into recv_data
+ * 
+ * @param *send_data Pointer to a byte array containing the 
+ *                   data to be sent to the server
+ * @param *recv_data Pointer to a byte array where the data 
+ *                   returned from the server will be stored
+ * @param data_intenfier Integer value representing the data 
+ *                       format type. Possible values are enumerated
+ *                       in the driver header file, i.e. TEXT_PLAIN
+ * @return Indicates success or failure reason
+ */ 
+int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_indentifier)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.select_coap_at_interface();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = _modem.coap_put(send_data, recv_data, data_indentifier);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
 	}
 
-	status = _modem.set_coap_uri(uri);
-	if(status != TP_NBIoT_Interface::NBIOT_OK)
-	{
-		return status;
-	}
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
 
-	status = _modem.pdu_header_add_uri_path();
-	if(status != TP_NBIoT_Interface::NBIOT_OK)
-	{
-		return status;
-	}
+/** Perform a POST request using CoAP and save the returned 
+ *  data into recv_data
+ * 
+ * @param *send_data Pointer to a byte array containing the 
+ *                   data to be sent to the server
+ * @param *recv_data Pointer to a byte array where the data 
+ *                   returned from the server will be stored
+ * @param data_intenfier Integer value representing the data 
+ *                       format type. Possible values are enumerated
+ *                       in the driver header file, i.e. SaraN2::TEXT_PLAIN
+ * @return Indicates success or failure reason
+ */ 
+int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_indentifier)
+{
+	int status = -1;
 
-	status = _modem.set_profile_validity(SaraN2::PROFILE_VALID);
-	if(status != TP_NBIoT_Interface::NBIOT_OK)
+	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
-		return status;
-	}
+		status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
 
-	status = _modem.save_profile(SaraN2::COAP_PROFILE_0);
-	if(status != TP_NBIoT_Interface::NBIOT_OK)
-	{
-		return status;
-	}
+		status = _modem.select_coap_at_interface();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
 
-	return TP_NBIoT_Interface::NBIOT_OK;
+		status = _modem.coap_post(send_data, recv_data, data_indentifier);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+	
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
