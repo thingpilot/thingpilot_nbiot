@@ -73,12 +73,50 @@ class TP_NBIoT_Interface
          */
 		int configure_coap(char *ipv4, uint16_t port, char *uri);
 
+		/** Perform a HTTP GET request over CoAP and capture the server
+		 *  response in recv_data
+		 *
+		 * @param *recv_data Pointer to a byte array that will be populated
+		 *              	 with the response from the server
+		 * @return Indicates success or failure reason
+		 */
 		int coap_get(char *recv_data);
 
+		/** Perform a HTTP DELETE request over CoAP and capture the server
+		 *  response in recv_data
+		 *
+		 * @param *recv_data Pointer to a byte array that will be populated
+		 *              	 with the response from the server
+		 * @return Indicates success or failure reason
+		 */
 		int coap_delete(char *recv_data);
 
+		/** Perform a PUT request using CoAP and save the returned 
+		 *  data into recv_data
+		 * 
+		 * @param *send_data Pointer to a byte array containing the 
+		 *                   data to be sent to the server
+		 * @param *recv_data Pointer to a byte array where the data 
+		 *                   returned from the server will be stored
+		 * @param data_intenfier Integer value representing the data 
+		 *                       format type. Possible values are enumerated
+		 *                       in the header file, i.e. TEXT_PLAIN
+		 * @return Indicates success or failure reason
+		 */ 
 		int coap_put(char *send_data, char *recv_data, int data_indentifier);
 
+		/** Perform a POST request using CoAP and save the returned 
+		 *  data into recv_data
+		 * 
+		 * @param *send_data Pointer to a byte array containing the 
+		 *                   data to be sent to the server
+		 * @param *recv_data Pointer to a byte array where the data 
+		 *                   returned from the server will be stored
+		 * @param data_intenfier Integer value representing the data 
+		 *                       format type. Possible values are enumerated
+		 *                       in the header file, i.e. TEXT_PLAIN
+		 * @return Indicates success or failure reason
+		 */ 
 		int coap_post(char *send_data, char *recv_data, int data_indentifier);
 
 
@@ -93,6 +131,7 @@ class TP_NBIoT_Interface
 		#else 
 		int _driver = TP_NBIoT_Interface::UNDEFINED;
 		#endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
+		
 };
 
 

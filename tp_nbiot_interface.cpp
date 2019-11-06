@@ -99,7 +99,13 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri)
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
-
+/** Perform a HTTP GET request over CoAP and capture the server
+ *  response in recv_data
+ *
+ * @param *recv_data Pointer to a byte array that will be populated
+ *              	 with the response from the server
+ * @return Indicates success or failure reason
+ */
 int TP_NBIoT_Interface::coap_get(char *recv_data)
 {
 	int status = -1;
@@ -130,7 +136,13 @@ int TP_NBIoT_Interface::coap_get(char *recv_data)
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
-
+/** Perform a HTTP DELETE request over CoAP and capture the server
+ *  response in recv_data
+ *
+ * @param *recv_data Pointer to a byte array that will be populated
+ *              	 with the response from the server
+ * @return Indicates success or failure reason
+ */
 int TP_NBIoT_Interface::coap_delete(char *recv_data)
 {
 	int status = -1;
@@ -161,7 +173,18 @@ int TP_NBIoT_Interface::coap_delete(char *recv_data)
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
-
+/** Perform a PUT request using CoAP and save the returned 
+ *  data into recv_data
+ * 
+ * @param *send_data Pointer to a byte array containing the 
+ *                   data to be sent to the server
+ * @param *recv_data Pointer to a byte array where the data 
+ *                   returned from the server will be stored
+ * @param data_intenfier Integer value representing the data 
+ *                       format type. Possible values are enumerated
+ *                       in the driver header file, i.e. TEXT_PLAIN
+ * @return Indicates success or failure reason
+ */ 
 int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_indentifier)
 {
 	int status = -1;
@@ -192,7 +215,18 @@ int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_inde
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
-
+/** Perform a POST request using CoAP and save the returned 
+ *  data into recv_data
+ * 
+ * @param *send_data Pointer to a byte array containing the 
+ *                   data to be sent to the server
+ * @param *recv_data Pointer to a byte array where the data 
+ *                   returned from the server will be stored
+ * @param data_intenfier Integer value representing the data 
+ *                       format type. Possible values are enumerated
+ *                       in the driver header file, i.e. SaraN2::TEXT_PLAIN
+ * @return Indicates success or failure reason
+ */ 
 int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_indentifier)
 {
 	int status = -1;
