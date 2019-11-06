@@ -29,7 +29,9 @@ TP_NBIoT_Interface::TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, Pi
                                        _modem(txu, rxu, cts, rst, vint, gpio, baud) 
 {
 	#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
-    _driver = TP_NBIoT_Interface::SARA_NXX;
+    _driver = TP_NBIoT_Interface::SARAN2;
+	#else 
+	_driver = TP_NBIoT_Interface::UNDEFINED;
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 }
 #endif /* #if defined (BOARD) && (BOARD == ...) */
@@ -57,7 +59,7 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri)
 {
 	int status = -1;
 
-	if(_driver == TP_NBIoT_Interface::SARA_NXX)
+	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
 		status = _modem.select_profile(SaraN2::COAP_PROFILE_0);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
@@ -106,7 +108,7 @@ int TP_NBIoT_Interface::coap_get(char *recv_data)
 {
 	int status = -1;
 
-	if(_driver == TP_NBIoT_Interface::SARA_NXX)
+	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
 		status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
@@ -137,7 +139,7 @@ int TP_NBIoT_Interface::coap_delete(char *recv_data)
 {
 	int status = -1;
 
-	if(_driver == TP_NBIoT_Interface::SARA_NXX)
+	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
 		status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
@@ -168,7 +170,7 @@ int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_inde
 {
 	int status = -1;
 
-	if(_driver == TP_NBIoT_Interface::SARA_NXX)
+	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
 		status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
@@ -199,7 +201,7 @@ int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_ind
 {
 	int status = -1;
 
-	if(_driver == TP_NBIoT_Interface::SARA_NXX)
+	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
 		status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)

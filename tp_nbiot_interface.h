@@ -29,7 +29,8 @@ class TP_NBIoT_Interface
 
 		enum
 		{
-			SARA_NXX = 0
+			UNDEFINED = 0,
+			SARAN2    = 1
 		};
 
 		enum
@@ -87,7 +88,7 @@ class TP_NBIoT_Interface
 		SaraN2 _modem;
 		#endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 
-		int _driver = -1;
+		int _driver;
 };
 
 
