@@ -41,6 +41,52 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 }
 
+
+int TP_NBIoT_Interface::get_connection_status(int &connected, int &reg_status)
+{
+    int status = -1;
+
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        int urc;
+
+        status = _modem.cscon(urc, connected);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
+        }
+
+        status = _modem.cereg(urc, reg_status);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
+        }
+
+        return TP_NBIoT_Interface::NBIOT_OK;
+    }
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+
+int TP_NBIoT_Interface::get_nuestats(char *data)
+{
+    int status = -1;
+
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        status = _modem.nuestats(data);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
+        }
+
+        return TP_NBIoT_Interface::NBIOT_OK;
+    }
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Configure CoAP profile 0 with a given IP address, port and URI
  *
  * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 

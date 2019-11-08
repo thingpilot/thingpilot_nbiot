@@ -61,6 +61,10 @@ class TP_NBIoT_Interface
          */
 		~TP_NBIoT_Interface();
 
+        int get_connection_status(int &connected, int &reg_status);
+
+        int get_nuestats(char *data);
+
         /** Configure CoAP profile 0 with a given IP address, port and URI
          *
          * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 
