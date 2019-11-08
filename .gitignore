@@ -1,0 +1,8 @@
+.build
+.mbed
+projectfiles
+*.py*
+mbed-os
+BUILD
+
+sara_n2_driver
