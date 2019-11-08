@@ -15,6 +15,14 @@
 #include <mbed.h>
 #include "board.h"
 
+/** NB-IoT #defines 
+ */
+#define EARFCN_B8_LOW   3450
+#define EARFCN_B8_HIGH  3799
+#define EARFCN_B20_LOW  6150
+#define EARFCN_B20_HIGH 6449
+
+
 #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0)
 
 #include "SaraN2Driver.h"
@@ -61,6 +69,24 @@ class TP_NBIoT_Interface
          */
 		~TP_NBIoT_Interface();
 
+		/** Query UE for radio connection and network registration status
+		 * 
+		 * @param &connected Address of integer in which to store radio 
+		 *                   connection status
+		 * @param &reg_status Address of integer in which to store
+		 *                    network registration status
+		 * @return Indicates success or failure reason
+		 */
+        int get_connection_status(int &connected, int &reg_status);
+
+		/** Return operation stats, of a given type, of the module
+         * 
+         * @param *data Point to .data parameter of Nuestats_t struct
+         *              to copy data into
+         * @return Indicates success or failure reason
+         */
+        int get_nuestats(char *data);
+
         /** Configure CoAP profile 0 with a given IP address, port and URI
          *
          * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 
@@ -69,9 +95,11 @@ class TP_NBIoT_Interface
          * @param port Destination server port
          * @param *uri Pointer to a byte array storing the URI, for example:
          *             char uri[] = "http://coap.me:5683/sink";
+		 * @param uri_length Number of characters in URI, cannot be greater
+ 		 *                   than 200
          * @return Indicates success or failure reason
          */
-		int configure_coap(char *ipv4, uint16_t port, char *uri);
+		int configure_coap(char *ipv4, uint16_t port, char *uri, uint8_t uri_length);
 
 		/** Perform a HTTP GET request over CoAP and capture the server
 		 *  response in recv_data

@@ -41,6 +41,64 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 }
 
+/** Query UE for radio connection and network registration status
+ * 
+ * @param &connected Address of integer in which to store radio 
+ *                   connection status
+ * @param &reg_status Address of integer in which to store
+ *                    network registration status
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_connection_status(int &connected, int &reg_status)
+{
+    int status = -1;
+
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        int urc;
+
+        status = _modem.cscon(urc, connected);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
+        }
+
+        status = _modem.cereg(urc, reg_status);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
+        }
+
+        return TP_NBIoT_Interface::NBIOT_OK;
+    }
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Return operation stats, of a given type, of the module
+ * 
+ * @param *data Point to .data parameter of Nuestats_t struct
+ *              to copy data into
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_nuestats(char *data)
+{
+    int status = -1;
+
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        status = _modem.nuestats(data);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
+        }
+
+        return TP_NBIoT_Interface::NBIOT_OK;
+    }
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Configure CoAP profile 0 with a given IP address, port and URI
  *
  * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 
@@ -49,9 +107,11 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
  * @param port Destination server port
  * @param *uri Pointer to a byte array storing the URI, for example:
  *             char uri[] = "http://coap.me:5683/sink";
+ * @param uri_length Number of characters in URI, cannot be greater
+ *                   than 200
  * @return Indicates success or failure reason
  */
-int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri)
+int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri, uint8_t uri_length)
 {
 	int status = -1;
 
@@ -69,7 +129,7 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri)
 			return status;
 		}
 
-		status = _modem.set_coap_uri(uri);
+		status = _modem.set_coap_uri(uri, uri_length);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
