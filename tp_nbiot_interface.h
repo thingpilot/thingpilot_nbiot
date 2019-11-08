@@ -15,6 +15,14 @@
 #include <mbed.h>
 #include "board.h"
 
+/** NB-IoT #defines 
+ */
+#define EARFCN_B8_LOW   3450
+#define EARFCN_B8_HIGH  3799
+#define EARFCN_B20_LOW  6150
+#define EARFCN_B20_HIGH 6449
+
+
 #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0)
 
 #include "SaraN2Driver.h"
