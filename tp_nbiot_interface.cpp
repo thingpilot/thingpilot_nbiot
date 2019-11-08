@@ -41,7 +41,14 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 }
 
-
+/** Query UE for radio connection and network registration status
+ * 
+ * @param &connected Address of integer in which to store radio 
+ *                   connection status
+ * @param &reg_status Address of integer in which to store
+ *                    network registration status
+ * @return Indicates success or failure reason
+ */
 int TP_NBIoT_Interface::get_connection_status(int &connected, int &reg_status)
 {
     int status = -1;
@@ -68,7 +75,12 @@ int TP_NBIoT_Interface::get_connection_status(int &connected, int &reg_status)
     return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
-
+/** Return operation stats, of a given type, of the module
+ * 
+ * @param *data Point to .data parameter of Nuestats_t struct
+ *              to copy data into
+ * @return Indicates success or failure reason
+ */
 int TP_NBIoT_Interface::get_nuestats(char *data)
 {
     int status = -1;

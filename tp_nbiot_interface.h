@@ -69,8 +69,22 @@ class TP_NBIoT_Interface
          */
 		~TP_NBIoT_Interface();
 
+		/** Query UE for radio connection and network registration status
+		 * 
+		 * @param &connected Address of integer in which to store radio 
+		 *                   connection status
+		 * @param &reg_status Address of integer in which to store
+		 *                    network registration status
+		 * @return Indicates success or failure reason
+		 */
         int get_connection_status(int &connected, int &reg_status);
 
+		/** Return operation stats, of a given type, of the module
+         * 
+         * @param *data Point to .data parameter of Nuestats_t struct
+         *              to copy data into
+         * @return Indicates success or failure reason
+         */
         int get_nuestats(char *data);
 
         /** Configure CoAP profile 0 with a given IP address, port and URI
