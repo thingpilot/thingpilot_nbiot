@@ -107,9 +107,11 @@ int TP_NBIoT_Interface::get_nuestats(char *data)
  * @param port Destination server port
  * @param *uri Pointer to a byte array storing the URI, for example:
  *             char uri[] = "http://coap.me:5683/sink";
+ * @param uri_length Number of characters in URI, cannot be greater
+ *                   than 200
  * @return Indicates success or failure reason
  */
-int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri)
+int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri, uint8_t uri_length)
 {
 	int status = -1;
 
@@ -127,7 +129,7 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri)
 			return status;
 		}
 
-		status = _modem.set_coap_uri(uri);
+		status = _modem.set_coap_uri(uri, uri_length);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;

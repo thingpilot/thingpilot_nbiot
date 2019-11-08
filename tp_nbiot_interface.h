@@ -97,7 +97,7 @@ class TP_NBIoT_Interface
          *             char uri[] = "http://coap.me:5683/sink";
          * @return Indicates success or failure reason
          */
-		int configure_coap(char *ipv4, uint16_t port, char *uri);
+		int configure_coap(char *ipv4, uint16_t port, char *uri, uint8_t uri_length);
 
 		/** Perform a HTTP GET request over CoAP and capture the server
 		 *  response in recv_data
