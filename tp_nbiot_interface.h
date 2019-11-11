@@ -198,6 +198,16 @@ class TP_NBIoT_Interface
 		 */
 		int disable_sim_power_save_mode();
 
+        /** Query whether or not Power Save Mode (PSM) is enabled
+		 *  
+		 * @param &power_save_mode Address of integer in which to store
+		 *                         value of power save mode setting. 1 
+		 *                         means that PSM is enabled, 0 means 
+		 *                         that PSM is disable
+		 * @return Indicates success or failure reason
+		 */
+        int query_power_save_mode(int &power_save_mode);
+
         /** Configure CoAP profile 0 with a given IP address, port and URI
          *
          * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 
