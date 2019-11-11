@@ -63,6 +63,50 @@ int TP_NBIoT_Interface::reboot_modem()
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Enable entire module Power Save Mode (PSM)
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_power_save_mode()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.enable_power_save_mode();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable entire module Power Save Mode (PSM)
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_power_save_mode()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.disable_power_save_mode();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Query UE for radio connection and network registration status
  * 
  * @param &connected Address of integer in which to store radio 
