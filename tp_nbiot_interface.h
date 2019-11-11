@@ -43,8 +43,29 @@ class TP_NBIoT_Interface
 
 		enum
 		{
-			NBIOT_OK         = 0,
-			DRIVER_UNKNOWN   = 40
+			NBIOT_OK          = 0,
+			DRIVER_UNKNOWN    = 40,
+			EXCEEDS_MAX_VALUE = 41
+		};
+
+		enum class T3412_units
+		{
+			HR_320 = 0, // 1 1 0
+			HR_10  = 1, // 0 1 0
+			HR_1   = 2, // 0 0 1
+			MIN_10 = 3, // 0 0 0 
+			MIN_1  = 4, // 1 0 1
+			SEC_30 = 5, // 1 0 0 
+			SEC_2  = 6, // 0 1 1 
+			DEACT  = 7  // 1 1 1 
+		};
+
+		enum class T3324_units
+		{
+			MIN_6 = 0, // 0 1 0
+			MIN_1 = 1, // 0 0 1
+			SEC_2 = 2, // 0 0 0 
+			DEACT = 3  // 1 1 1 
 		};
 
 	    #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0)
