@@ -164,9 +164,11 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri, uin
  *
  * @param *recv_data Pointer to a byte array that will be populated
  *              	 with the response from the server
+ * @param &response_code Address of integer where CoAP operation response code
+ *                       will be stored
  * @return Indicates success or failure reason
  */
-int TP_NBIoT_Interface::coap_get(char *recv_data)
+int TP_NBIoT_Interface::coap_get(char *recv_data, int &response_code)
 {
 	int status = -1;
 
@@ -184,7 +186,7 @@ int TP_NBIoT_Interface::coap_get(char *recv_data)
 			return status;
 		}
 
-		status = _modem.coap_get(recv_data);
+		status = _modem.coap_get(recv_data, response_code);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
@@ -201,9 +203,11 @@ int TP_NBIoT_Interface::coap_get(char *recv_data)
  *
  * @param *recv_data Pointer to a byte array that will be populated
  *              	 with the response from the server
+ * @param &response_code Address of integer where CoAP operation response code
+ *                       will be stored
  * @return Indicates success or failure reason
  */
-int TP_NBIoT_Interface::coap_delete(char *recv_data)
+int TP_NBIoT_Interface::coap_delete(char *recv_data, int &response_code)
 {
 	int status = -1;
 
@@ -221,7 +225,7 @@ int TP_NBIoT_Interface::coap_delete(char *recv_data)
 			return status;
 		}
 
-		status = _modem.coap_delete(recv_data);
+		status = _modem.coap_delete(recv_data, response_code);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
@@ -243,9 +247,11 @@ int TP_NBIoT_Interface::coap_delete(char *recv_data)
  * @param data_intenfier Integer value representing the data 
  *                       format type. Possible values are enumerated
  *                       in the driver header file, i.e. TEXT_PLAIN
+ * @param &response_code Address of integer where CoAP operation response code
+ *                       will be stored
  * @return Indicates success or failure reason
  */ 
-int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_indentifier)
+int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_indentifier, int &response_code)
 {
 	int status = -1;
 
@@ -263,7 +269,7 @@ int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_inde
 			return status;
 		}
 
-		status = _modem.coap_put(send_data, recv_data, data_indentifier);
+		status = _modem.coap_put(send_data, recv_data, data_indentifier, response_code);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
@@ -285,9 +291,11 @@ int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_inde
  * @param data_intenfier Integer value representing the data 
  *                       format type. Possible values are enumerated
  *                       in the driver header file, i.e. SaraN2::TEXT_PLAIN
+ * @param &response_code Address of integer where CoAP operation response code
+ *                       will be stored
  * @return Indicates success or failure reason
  */ 
-int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_indentifier)
+int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_indentifier, int &response_code)
 {
 	int status = -1;
 
@@ -305,7 +313,7 @@ int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_ind
 			return status;
 		}
 
-		status = _modem.coap_post(send_data, recv_data, data_indentifier);
+		status = _modem.coap_post(send_data, recv_data, data_indentifier, response_code);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;

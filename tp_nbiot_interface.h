@@ -106,18 +106,22 @@ class TP_NBIoT_Interface
 		 *
 		 * @param *recv_data Pointer to a byte array that will be populated
 		 *              	 with the response from the server
+         * @param &response_code Address of integer where CoAP operation response code
+         *                       will be stored
 		 * @return Indicates success or failure reason
 		 */
-		int coap_get(char *recv_data);
+		int coap_get(char *recv_data, int &response_code);
 
 		/** Perform a HTTP DELETE request over CoAP and capture the server
 		 *  response in recv_data
 		 *
 		 * @param *recv_data Pointer to a byte array that will be populated
 		 *              	 with the response from the server
+         * @param &response_code Address of integer where CoAP operation response code
+         *                       will be stored
 		 * @return Indicates success or failure reason
 		 */
-		int coap_delete(char *recv_data);
+		int coap_delete(char *recv_data, int &response_code);
 
 		/** Perform a PUT request using CoAP and save the returned 
 		 *  data into recv_data
@@ -129,9 +133,11 @@ class TP_NBIoT_Interface
 		 * @param data_intenfier Integer value representing the data 
 		 *                       format type. Possible values are enumerated
 		 *                       in the header file, i.e. TEXT_PLAIN
+         * @param &response_code Address of integer where CoAP operation response code
+         *                       will be stored
 		 * @return Indicates success or failure reason
 		 */ 
-		int coap_put(char *send_data, char *recv_data, int data_indentifier);
+		int coap_put(char *send_data, char *recv_data, int data_indentifier, int &response_code);
 
 		/** Perform a POST request using CoAP and save the returned 
 		 *  data into recv_data
@@ -143,9 +149,11 @@ class TP_NBIoT_Interface
 		 * @param data_intenfier Integer value representing the data 
 		 *                       format type. Possible values are enumerated
 		 *                       in the header file, i.e. TEXT_PLAIN
+         * @param &response_code Address of integer where CoAP operation response code
+         *                       will be stored
 		 * @return Indicates success or failure reason
 		 */ 
-		int coap_post(char *send_data, char *recv_data, int data_indentifier);
+		int coap_post(char *send_data, char *recv_data, int data_indentifier, int &response_code);
 
 
 	private:
