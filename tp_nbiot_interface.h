@@ -75,6 +75,18 @@ class TP_NBIoT_Interface
 		 */
 		int reboot_modem();
 
+		/** Enable entire module Power Save Mode (PSM)
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int enable_power_save_mode();
+
+		/** Disable entire module Power Save Mode (PSM)
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int disable_power_save_mode();
+
 		/** Query UE for radio connection and network registration status
 		 * 
 		 * @param &connected Address of integer in which to store radio 
