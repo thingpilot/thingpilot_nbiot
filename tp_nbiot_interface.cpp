@@ -41,7 +41,10 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 }
 
-
+/** Power-cycle the NB-IoT modem
+ * 
+ * @return Indicates success or failure reason
+ */
 int TP_NBIoT_Interface::reboot_modem()
 {
 	int status = -1;
