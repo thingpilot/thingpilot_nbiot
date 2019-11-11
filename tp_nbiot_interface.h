@@ -297,6 +297,8 @@ class TP_NBIoT_Interface
 		 */ 
 		int coap_post(char *send_data, char *recv_data, int data_indentifier, int &response_code);
 
+		int set_t3324_timer(T3324_units unit, uint8_t multiples);
+
 		int set_t3412_timer(T3412_units unit, uint8_t multiples);
 
 

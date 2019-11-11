@@ -735,6 +735,52 @@ int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_ind
 }
 
 
+int TP_NBIoT_Interface::set_t3324_timer(T3324_units unit, uint8_t multiples)
+{
+	if(multiples > 31)
+	{
+		return TP_NBIoT_Interface::EXCEEDS_MAX_VALUE;
+	}
+
+	char binary[8];
+    dec_to_bin_5_bit(multiples, binary);
+
+    char data[9];
+	memcpy(&data[8], &"\0", 1);
+
+    char unit_char[3];
+
+	switch(unit)
+	{
+		case T3324_units::MIN_6:
+		{
+			memcpy(&unit_char[0], &"010", 3);
+			break;
+		}
+		case T3324_units::MIN_1:
+		{
+			memcpy(&unit_char[0], &"001", 3);
+			break;
+		}
+		case T3324_units::SEC_2:
+		{
+			memcpy(&unit_char[0], &"000", 3);
+			break;
+		}
+		case T3324_units::DEACT:
+		{
+			memcpy(&unit_char[0], &"111", 3);
+			break;
+		}
+	}
+
+	memcpy(&data[0], unit_char, 3);
+    memcpy(&data[3], &binary[0], 5);
+
+    return TP_NBIoT_Interface::NBIOT_OK;
+}
+
+
 int TP_NBIoT_Interface::set_t3412_timer(T3412_units unit, uint8_t multiples)
 {
     if(multiples > 31)
