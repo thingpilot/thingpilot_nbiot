@@ -107,6 +107,32 @@ int TP_NBIoT_Interface::disable_power_save_mode()
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Query whether or not Power Save Mode (PSM) is enabled
+ *  
+ * @param &power_save_mode Address of integer in which to store
+ *                         value of power save mode setting. 1 
+ *                         means that PSM is enabled, 0 means 
+ *                         that PSM is disable
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::query_power_save_mode(int &power_save_mode)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.query_power_save_mode(power_save_mode);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Query UE for radio connection and network registration status
  * 
  * @param &connected Address of integer in which to store radio 
