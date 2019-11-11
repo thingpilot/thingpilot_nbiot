@@ -178,13 +178,13 @@ class TP_NBIoT_Interface
 		 *
 		 * @return Indicates success or failure reason
 		 */
-		int enable_power_save_mode();
+		int enable_sim_power_save_mode();
 
 		/** Disable previously described SIM PSM
 		 *
 		 * @return Indicates success or failure reason
 		 */
-		int disable_power_save_mode();
+		int disable_sim_power_save_mode();
 
         /** Configure CoAP profile 0 with a given IP address, port and URI
          *

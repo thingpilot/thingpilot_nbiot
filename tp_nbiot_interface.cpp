@@ -398,7 +398,7 @@ int TP_NBIoT_Interface::disable_bip()
  *
  * @return Indicates success or failure reason
  */
-int TP_NBIoT_Interface::enable_power_save_mode()
+int TP_NBIoT_Interface::enable_sim_power_save_mode()
 {
 	int status = -1;
 
@@ -420,7 +420,7 @@ int TP_NBIoT_Interface::enable_power_save_mode()
  *
  * @return Indicates success or failure reason
  */
-int TP_NBIoT_Interface::disable_power_save_mode()
+int TP_NBIoT_Interface::disable_sim_power_save_mode()
 {
 	int status = -1;
 
