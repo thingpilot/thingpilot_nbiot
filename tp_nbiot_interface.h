@@ -69,6 +69,12 @@ class TP_NBIoT_Interface
          */
 		~TP_NBIoT_Interface();
 
+		/** Power-cycle the NB-IoT modem
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int reboot_modem();
+
 		/** Query UE for radio connection and network registration status
 		 * 
 		 * @param &connected Address of integer in which to store radio 
