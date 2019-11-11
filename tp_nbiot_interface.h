@@ -87,6 +87,99 @@ class TP_NBIoT_Interface
          */
         int get_nuestats(char *data);
 
+		/** Allow the platform to automatically attempt to connect to the 
+		 *  network after power-on or reboot. Will set AT+CFUN=1 and read
+		 *  the SIM PLMN. Will use APN provided by network.
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int enable_autoconnect();
+
+		/** Disable previously described autoconnect functionality
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int disable_autoconnect();
+
+		/** Enable CR_0354_0338 scrambling. This is an operator specific 
+		 *  setting so please confirm with your mobile network provider
+		 *  if you're unsure as to what to set this to
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int enable_scrambling();
+
+		/** Disable previously described CR_0354_0338 scrambling functionality
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int disable_scrambling();
+
+		/** Enable the scheduling of conflicted NSIB. This is an operator 
+		 *  specific setting so please confirm with your mobile network 
+		 *  provider if you're unsure as to what to set this to
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int enable_si_avoid();
+
+		/** Disable the previously described scheduling of conflicted NSIB
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int disable_si_avoid();
+
+		/** Enable combined EPS/IMSI network attach
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int enable_combine_attach();
+
+		/** Disable combined EPS/IMSI network attach
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int disable_combine_attach();
+
+		/** Enable RRC cell reselection
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int enable_cell_reselection();
+
+		/** Disable RRC cell reselection
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int disable_cell_reselection();
+
+		/** Enable Bearer Independent Protocol (BIP) where BIP is the interface
+		 *  between the SIM and the ME which provides access to the data bearers
+		 *  supported by the ME
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int enable_bip();
+
+		/** Disable previously described BIP functionality
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+		int disable_bip();
+
+		/** When enabled, the SIM is only powered when it is accessed and will be 
+		 *  un-powered when not required, i.e. when in PSM
+		 *
+		 * @return Indicates success or failure reason
+		 */
+		int enable_power_save_mode();
+
+		/** Disable previously described SIM PSM
+		 *
+		 * @return Indicates success or failure reason
+		 */
+		int disable_power_save_mode();
+
         /** Configure CoAP profile 0 with a given IP address, port and URI
          *
          * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 

@@ -99,6 +99,323 @@ int TP_NBIoT_Interface::get_nuestats(char *data)
     return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Allow the platform to automatically attempt to connect to the 
+ *  network after power-on or reboot. Will set AT+CFUN=1 and read
+ *  the SIM PLMN. Will use APN provided by network.
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_autoconnect()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::AUTOCONNECT, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable previously described autoconnect functionality
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_autoconnect()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::AUTOCONNECT, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable CR_0354_0338 scrambling. This is an operator specific 
+ *  setting so please confirm with your mobile network provider
+ *  if you're unsure as to what to set this to
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_scrambling()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::SCRAMBLING, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable previously described CR_0354_0338 scrambling functionality
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_scrambling()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::SCRAMBLING, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable the scheduling of conflicted NSIB. This is an operator 
+ *  specific setting so please confirm with your mobile network 
+ *  provider if you're unsure as to what to set this to
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_si_avoid()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::SI_AVOID, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable the previously described scheduling of conflicted NSIB
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_si_avoid()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::SI_AVOID, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable combined EPS/IMSI network attach
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_combine_attach()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::COMBINE_ATTACH, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable combined EPS/IMSI network attach
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_combine_attach()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::COMBINE_ATTACH, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable RRC cell reselection
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_cell_reselection()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::CELL_RESELECTION, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable RRC cell reselection
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_cell_reselection()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::CELL_RESELECTION, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable Bearer Independent Protocol (BIP) where BIP is the interface
+ *  between the SIM and the ME which provides access to the data bearers
+ *  supported by the ME
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_bip()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::ENABLE_BIP, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable previously described BIP functionality
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_bip()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::ENABLE_BIP, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** When enabled, the SIM is only powered when it is accessed and will be 
+ *  un-powered when not required, i.e. when in PSM
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_power_save_mode()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::NAS_SIM_PSM_ENABLE, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable previously described SIM PSM
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_power_save_mode()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::NAS_SIM_PSM_ENABLE, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Configure CoAP profile 0 with a given IP address, port and URI
  *
  * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 
