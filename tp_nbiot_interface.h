@@ -69,6 +69,8 @@ class TP_NBIoT_Interface
          */
 		~TP_NBIoT_Interface();
 
+		int reboot_modem();
+
 		/** Query UE for radio connection and network registration status
 		 * 
 		 * @param &connected Address of integer in which to store radio 

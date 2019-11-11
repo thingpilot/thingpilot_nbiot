@@ -41,6 +41,25 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 }
 
+
+int TP_NBIoT_Interface::reboot_modem()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.reboot_module();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Query UE for radio connection and network registration status
  * 
  * @param &connected Address of integer in which to store radio 
