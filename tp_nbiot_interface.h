@@ -87,6 +87,34 @@ class TP_NBIoT_Interface
          */
         int get_nuestats(char *data);
 
+		int enable_autoconnect();
+
+		int disable_autoconnect();
+
+		int enable_scrambling();
+
+		int disable_scrambling();
+
+		int enable_si_avoid();
+
+		int disable_si_avoid();
+
+		int enable_combine_attach();
+
+		int disable_combine_attach();
+
+		int enable_cell_reselection();
+
+		int disable_cell_reselection();
+
+		int enable_bip();
+
+		int disable_bip();
+
+		int enable_power_save_mode();
+
+		int disable_power_save_mode();
+
         /** Configure CoAP profile 0 with a given IP address, port and URI
          *
          * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 
