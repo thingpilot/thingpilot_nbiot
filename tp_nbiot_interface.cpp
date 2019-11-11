@@ -777,7 +777,20 @@ int TP_NBIoT_Interface::set_t3324_timer(T3324_units unit, uint8_t multiples)
 	memcpy(&data[0], unit_char, 3);
     memcpy(&data[3], &binary[0], 5);
 
-    return TP_NBIoT_Interface::NBIOT_OK;
+    int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.set_t3324_timer(data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 
@@ -843,7 +856,20 @@ int TP_NBIoT_Interface::set_t3412_timer(T3412_units unit, uint8_t multiples)
     memcpy(&data[0], unit_char, 3);
     memcpy(&data[3], &binary[0], 5);
 
-    return TP_NBIoT_Interface::NBIOT_OK;
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.set_t3412_timer(data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }   
 
 
