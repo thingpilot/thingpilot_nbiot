@@ -734,3 +734,366 @@ int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_ind
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Set T3412 timer to multiples of given units
+ * 
+ * @param unit Enumerated value within T3412_units enum class
+ * @param multiples Value no greater than 31 that determines
+ *                  how many multiples of unit to set the
+ *                  timer to
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::set_tau_timer(T3412_units unit, uint8_t multiples)
+{
+    if(multiples > 31)
+    {
+        return TP_NBIoT_Interface::EXCEEDS_MAX_VALUE;
+    }
+
+    char binary[8];
+    dec_to_bin_5_bit(multiples, binary);
+
+    char data[9];
+	memcpy(&data[8], &"\0", 1);
+
+    char unit_char[3];
+
+    switch(unit)
+    {
+        case T3412_units::HR_320: 
+        {
+            memcpy(&unit_char[0], &"110", 3);
+            break;
+        }
+        case T3412_units::HR_10: 
+        {
+            memcpy(&unit_char[0], &"010", 3);
+            break;
+        }
+        case T3412_units::HR_1: 
+        {
+            memcpy(&unit_char[0], &"001", 3);
+            break;
+        }
+        case T3412_units::MIN_10: 
+        {
+            memcpy(&unit_char[0], &"000", 3);
+            break;
+        }
+        case T3412_units::MIN_1: 
+        {
+            memcpy(&unit_char[0], &"101", 3);
+            break;
+        }
+        case T3412_units::SEC_30: 
+        {
+            memcpy(&unit_char[0], &"100", 3);
+            break;
+        }
+        case T3412_units::SEC_2: 
+        {
+            memcpy(&unit_char[0], &"011", 3);
+            break;
+        }
+        case T3412_units::DEACT: 
+        {
+            memcpy(&unit_char[0], &"111", 3);
+            break;
+        }
+    }
+    
+    memcpy(&data[0], unit_char, 3);
+    memcpy(&data[3], &binary[0], 5);
+
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.set_t3412_timer(data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}   
+
+/** Retrieve T3412 timer value as binary string
+ * 
+ * @param *timer Pointer to char array in which to store
+ *               timer value as binary string
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_tau_timer(char *timer)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.get_t3412_timer(timer);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+	
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Retrieve T3412 timer value as units and multiples
+ * 
+ * @param &unit Address of T3412_units value into which
+ *              the determined timer unit will be stored
+ * @param &multiples Address of uint8_t into which 
+ *                   the determined multiples value will be 
+ *                   stored
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_tau_timer(T3412_units &unit, uint8_t &multiples)
+{
+	int status = -1;
+    char timer[10];
+
+    status = get_tau_timer(timer);
+    if(status != TP_NBIoT_Interface::NBIOT_OK)
+    {
+        return status;
+    }
+
+    if(strncmp(timer, "110", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::HR_320;
+    }
+    else if(strncmp(timer, "010", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::HR_10;
+    }
+    else if(strncmp(timer, "001", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::HR_1;
+    }
+    else if(strncmp(timer, "000", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::MIN_10;
+    }
+    else if(strncmp(timer, "101", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::MIN_1;
+    }
+    else if(strncmp(timer, "100", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::SEC_30;
+    }
+    else if(strncmp(timer, "011", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::SEC_2;
+    }
+    else if(strncmp(timer, "111", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::DEACT;
+    }
+    else
+    {
+        unit = TP_NBIoT_Interface::T3412_units::INVALID;
+    }
+
+    uint8_t binary_value = 16;
+    for(int i = 3; i < 8; i++)
+    {
+        if((int)timer[i] == 49) // 1
+        {
+            multiples = multiples + binary_value;
+        }
+        
+        if(binary_value == 1)
+        {
+            break;
+        }
+
+        binary_value = binary_value / 2;
+    }
+    
+    return TP_NBIoT_Interface::NBIOT_OK;
+}
+
+/** Set T3324 timer to multiples of given units
+ * 
+ * @param unit Enumerated value within T3324_units enum class
+ * @param multiples Value no greater than 31 that determines
+ *                  how many multiples of unit to set the
+ *                  timer to
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::set_active_time(T3324_units unit, uint8_t multiples)
+{
+	if(multiples > 31)
+	{
+		return TP_NBIoT_Interface::EXCEEDS_MAX_VALUE;
+	}
+
+	char binary[8];
+    dec_to_bin_5_bit(multiples, binary);
+
+    char data[9];
+	memcpy(&data[8], &"\0", 1);
+
+    char unit_char[3];
+
+	switch(unit)
+	{
+		case T3324_units::MIN_6:
+		{
+			memcpy(&unit_char[0], &"010", 3);
+			break;
+		}
+		case T3324_units::MIN_1:
+		{
+			memcpy(&unit_char[0], &"001", 3);
+			break;
+		}
+		case T3324_units::SEC_2:
+		{
+			memcpy(&unit_char[0], &"000", 3);
+			break;
+		}
+		case T3324_units::DEACT:
+		{
+			memcpy(&unit_char[0], &"111", 3);
+			break;
+		}
+	}
+
+	memcpy(&data[0], unit_char, 3);
+    memcpy(&data[3], &binary[0], 5);
+
+    int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.set_t3324_timer(data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Retrieve T3324 timer value as binary string
+ * 
+ * @param *timer Pointer to char array in which to store
+ *               timer value as binary string
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_active_time(char *timer)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.get_t3324_timer(timer);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+	
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Retrieve T3324 timer value as units and multiples
+ * 
+ * @param &unit Address of T3324_units value into which
+ *              the determined timer unit will be stored
+ * @param &multiples Address of uint8_t into which 
+ *                   the determined multiples value will be 
+ *                   stored
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_active_time(T3324_units &unit, uint8_t &multiples)
+{
+	int status = -1;
+    char timer[10];
+
+    status = get_active_time(timer);
+    if(status != TP_NBIoT_Interface::NBIOT_OK)
+    {
+        return status;
+    }
+
+    if(strncmp(timer, "010", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::MIN_6;
+    }
+    else if(strncmp(timer, "001", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::MIN_1;
+    }
+    else if(strncmp(timer, "000", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::SEC_2;
+    }
+    else if(strncmp(timer, "111", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::DEACT;
+    }
+    else
+    {
+        unit = TP_NBIoT_Interface::T3324_units::INVALID;
+    }
+
+    uint8_t binary_value = 16;
+    for(int i = 3; i < 8; i++)
+    {
+        if((int)timer[i] == 49) // 1
+        {
+            multiples = multiples + binary_value;
+        }
+        
+        if(binary_value == 1)
+        {
+            break;
+        }
+
+        binary_value = binary_value / 2;
+    }
+    
+    return TP_NBIoT_Interface::NBIOT_OK;
+}
+
+
+void TP_NBIoT_Interface::dec_to_bin_5_bit(uint8_t multiples, char *binary)
+{
+    int buffer[8];
+    int i = 0;
+
+    for(i; multiples > 0; i++)
+    {
+        buffer[i] = multiples % 2;
+        multiples = multiples / 2;
+    }
+
+    int padding = 5 - i;
+
+    for(int j = 0; j < padding; j++)
+    {
+        sprintf(&binary[j], "%d", 0);
+    }
+
+    int index = 4 - padding;
+    for(padding; padding < 5; padding++)
+    {
+        sprintf(&binary[padding], "%d", buffer[index]);
+        index--;
+    }
+}
+

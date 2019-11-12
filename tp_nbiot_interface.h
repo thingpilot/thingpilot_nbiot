@@ -43,8 +43,31 @@ class TP_NBIoT_Interface
 
 		enum
 		{
-			NBIOT_OK         = 0,
-			DRIVER_UNKNOWN   = 40
+			NBIOT_OK          = 0,
+			DRIVER_UNKNOWN    = 40,
+			EXCEEDS_MAX_VALUE = 41
+		};
+
+		enum class T3412_units
+		{
+			HR_320  = 0, // 1 1 0
+			HR_10   = 1, // 0 1 0
+			HR_1    = 2, // 0 0 1
+			MIN_10  = 3, // 0 0 0 
+			MIN_1   = 4, // 1 0 1
+			SEC_30  = 5, // 1 0 0 
+			SEC_2   = 6, // 0 1 1 
+			DEACT   = 7, // 1 1 1 
+            INVALID = 8
+		};
+
+		enum class T3324_units
+		{
+			MIN_6   = 0, // 0 1 0
+			MIN_1   = 1, // 0 0 1
+			SEC_2   = 2, // 0 0 0 
+			DEACT   = 3, // 1 1 1 
+            INVALID = 4
 		};
 
 	    #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0)
@@ -276,8 +299,68 @@ class TP_NBIoT_Interface
 		 */ 
 		int coap_post(char *send_data, char *recv_data, int data_indentifier, int &response_code);
 
+		/** Set T3412 timer to multiples of given units
+		 * 
+		 * @param unit Enumerated value within T3412_units enum class
+		 * @param multiples Value no greater than 31 that determines
+		 *                  how many multiples of unit to set the
+		 *                  timer to
+		 * @return Indicates success or failure reason
+		 */
+		int set_tau_timer(T3412_units unit, uint8_t multiples);
+
+		/** Retrieve T3412 timer value as binary string
+		 * 
+		 * @param *timer Pointer to char array in which to store
+		 *               timer value as binary string
+		 * @return Indicates success or failure reason
+		 */
+		int get_tau_timer(char *timer);
+
+		/** Retrieve T3412 timer value as units and multiples
+		 * 
+		 * @param &unit Address of T3412_units value into which
+		 *              the determined timer unit will be stored
+		 * @param &multiples Address of uint8_t into which 
+		 *                   the determined multiples value will be 
+		 *                   stored
+		 * @return Indicates success or failure reason
+		 */
+		int get_tau_timer(T3412_units &unit, uint8_t &multiples);
+
+		/** Set T3324 timer to multiples of given units
+		 * 
+		 * @param unit Enumerated value within T3324_units enum class
+		 * @param multiples Value no greater than 31 that determines
+		 *                  how many multiples of unit to set the
+		 *                  timer to
+		 * @return Indicates success or failure reason
+		 */
+		int set_active_time(T3324_units unit, uint8_t multiples);
+
+		/** Retrieve T3324 timer value as binary string
+		 * 
+		 * @param *timer Pointer to char array in which to store
+		 *               timer value as binary string
+		 * @return Indicates success or failure reason
+		 */
+		int get_active_time(char *timer);
+
+		/** Retrieve T3324 timer value as units and multiples
+		 * 
+		 * @param &unit Address of T3324_units value into which
+		 *              the determined timer unit will be stored
+		 * @param &multiples Address of uint8_t into which 
+		 *                   the determined multiples value will be 
+		 *                   stored
+		 * @return Indicates success or failure reason
+		 */
+		int get_active_time(T3324_units &unit, uint8_t &multiples);
+
 
 	private:
+
+		void dec_to_bin_5_bit(uint8_t multiples, char *binary);
 
 		#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
 		SaraN2 _modem;
