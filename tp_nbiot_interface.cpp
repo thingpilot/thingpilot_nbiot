@@ -69,7 +69,20 @@ int TP_NBIoT_Interface::reboot_modem()
  */
 int TP_NBIoT_Interface::deactivate_radio()
 {
+	int status = -1;
 
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.deactivate_radio();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Enable TX and RX RF circuits
@@ -78,7 +91,20 @@ int TP_NBIoT_Interface::deactivate_radio()
  */
 int TP_NBIoT_Interface::activate_radio()
 {
+	int status = -1;
 
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.activate_radio();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Attempt to attach to network GPRS service
@@ -87,7 +113,20 @@ int TP_NBIoT_Interface::activate_radio()
  */
 int TP_NBIoT_Interface::gprs_attach()
 {
+	int status = -1;
 
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.gprs_attach();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Attempt to detach from network GPRS service
@@ -96,7 +135,20 @@ int TP_NBIoT_Interface::gprs_attach()
  */
 int TP_NBIoT_Interface::gprs_detach()
 {
+	int status = -1;
 
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.gprs_detach();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Attempt to automatically register to network
@@ -106,7 +158,20 @@ int TP_NBIoT_Interface::gprs_detach()
  */
 int TP_NBIoT_Interface::auto_register_to_network()
 {
+	int status = -1;
 
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.auto_register_to_network();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Deregister from network
@@ -115,7 +180,20 @@ int TP_NBIoT_Interface::auto_register_to_network()
  */
 int TP_NBIoT_Interface::deregister_from_network()
 {
-	
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.deregister_from_network();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Enable entire module Power Save Mode (PSM)
