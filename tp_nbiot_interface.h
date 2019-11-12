@@ -108,6 +108,43 @@ class TP_NBIoT_Interface
 		 */
 		int reboot_modem();
 
+		/** Disable TX and RX RF circuits
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+        int deactivate_radio();
+
+		/** Enable TX and RX RF circuits
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+        int activate_radio();
+
+		/** Attempt to attach to network GPRS service
+		 *
+		 * @return Indicates success or failure reason
+		 */
+        int gprs_attach();
+
+		/** Attempt to detach from network GPRS service
+		 *
+		 * @return Indicates success or failure reason
+		 */
+        int gprs_detach();
+
+		/** Attempt to automatically register to network
+		 *  using SIM card home PLMN
+		 *
+		 * @return Indicates success or failure reason
+		 */
+        int auto_register_to_network();
+
+		/** Deregister from network
+		 * 
+		 * @return Indicates success or failure reason
+		 */
+        int deregister_from_network();
+
 		/** Enable entire module Power Save Mode (PSM)
 		 * 
 		 * @return Indicates success or failure reason

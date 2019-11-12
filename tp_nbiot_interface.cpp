@@ -63,6 +63,61 @@ int TP_NBIoT_Interface::reboot_modem()
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Disable TX and RX RF circuits
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::deactivate_radio()
+{
+
+}
+
+/** Enable TX and RX RF circuits
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::activate_radio()
+{
+
+}
+
+/** Attempt to attach to network GPRS service
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::gprs_attach()
+{
+
+}
+
+/** Attempt to detach from network GPRS service
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::gprs_detach()
+{
+
+}
+
+/** Attempt to automatically register to network
+ *  using SIM card home PLMN
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::auto_register_to_network()
+{
+
+}
+
+/** Deregister from network
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::deregister_from_network()
+{
+	
+}
+
 /** Enable entire module Power Save Mode (PSM)
  * 
  * @return Indicates success or failure reason
