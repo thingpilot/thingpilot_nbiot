@@ -370,6 +370,14 @@ class TP_NBIoT_Interface
 
 	private:
 
+		/** Convert decimal number (with max value of 5-bits) to a binary string,
+		 *  i.e. 10 = "01010"
+		 * 
+		 * @param multiples Decimal value to convert to binary
+		 * @param *binary Pointer to a char array to which to return 
+		 *                the binary string
+		 * @return None
+		 */
 		void dec_to_bin_5_bit(uint8_t multiples, char *binary);
 
 		#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
