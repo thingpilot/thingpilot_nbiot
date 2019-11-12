@@ -799,6 +799,10 @@ int TP_NBIoT_Interface::set_tau_timer(T3412_units unit, uint8_t multiples)
             memcpy(&unit_char[0], &"111", 3);
             break;
         }
+		default:
+		{
+			return TP_NBIoT_Interface::INVALID_UNIT_VALUE;
+		}
     }
     
     memcpy(&data[0], unit_char, 3);
@@ -964,6 +968,10 @@ int TP_NBIoT_Interface::set_active_time(T3324_units unit, uint8_t multiples)
 		{
 			memcpy(&unit_char[0], &"111", 3);
 			break;
+		}
+		default:
+		{
+			return TP_NBIoT_Interface::INVALID_UNIT_VALUE;
 		}
 	}
 
