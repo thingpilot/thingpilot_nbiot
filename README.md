@@ -6,7 +6,7 @@
 - Power-cycle modem and return status code representing success or failure
 - Enable/Disable modem PSM and query this setting
 - Set T3412 timer and read this either as a binary string or as T3412 units (as specified in 3GPP Rel. 13) and multiples of said unit
-- Set T3324 timer and read this either as a binary string or as T3412 units (as specified in 3GPP Rel. 13) and multiples of said unit
+- Set T3324 timer and read this either as a binary string or as T3324 units (as specified in 3GPP Rel. 13) and multiples of said unit
 - Manually trigger network registration/deregistration, radio functionality and GPRS attach/detach
 
 **v0.1.0** *08/11/2019*
