@@ -1,6 +1,6 @@
 /**
   * @file    tp_nbiot_interface.cpp
-  * @version 0.1.0
+  * @version 0.2.0
   * @author  Adam Mitchell
   * @brief   C++ file of the Thingpilot NB-IoT interface. This interface is hardware agnostic
   *          and depends on the underlying modem drivers exposing an identical interface
@@ -39,6 +39,231 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
 	#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
     _modem.~SaraN2();
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
+}
+
+/** Power-cycle the NB-IoT modem
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::reboot_modem()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.reboot_module();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable TX and RX RF circuits
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::deactivate_radio()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.deactivate_radio();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable TX and RX RF circuits
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::activate_radio()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.activate_radio();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Attempt to attach to network GPRS service
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::gprs_attach()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.gprs_attach();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Attempt to detach from network GPRS service
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::gprs_detach()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.gprs_detach();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Attempt to automatically register to network
+ *  using SIM card home PLMN
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::auto_register_to_network()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.auto_register_to_network();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Deregister from network
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::deregister_from_network()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.deregister_from_network();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable entire module Power Save Mode (PSM)
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_power_save_mode()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.enable_power_save_mode();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable entire module Power Save Mode (PSM)
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_power_save_mode()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.disable_power_save_mode();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Query whether or not Power Save Mode (PSM) is enabled
+ *  
+ * @param &power_save_mode Address of integer in which to store
+ *                         value of power save mode setting. 1 
+ *                         means that PSM is enabled, 0 means 
+ *                         that PSM is disable
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::query_power_save_mode(int &power_save_mode)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.query_power_save_mode(power_save_mode);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Query UE for radio connection and network registration status
@@ -97,6 +322,323 @@ int TP_NBIoT_Interface::get_nuestats(char *data)
     }
 
     return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Allow the platform to automatically attempt to connect to the 
+ *  network after power-on or reboot. Will set AT+CFUN=1 and read
+ *  the SIM PLMN. Will use APN provided by network.
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_autoconnect()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::AUTOCONNECT, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable previously described autoconnect functionality
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_autoconnect()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::AUTOCONNECT, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable CR_0354_0338 scrambling. This is an operator specific 
+ *  setting so please confirm with your mobile network provider
+ *  if you're unsure as to what to set this to
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_scrambling()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::SCRAMBLING, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable previously described CR_0354_0338 scrambling functionality
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_scrambling()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::SCRAMBLING, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable the scheduling of conflicted NSIB. This is an operator 
+ *  specific setting so please confirm with your mobile network 
+ *  provider if you're unsure as to what to set this to
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_si_avoid()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::SI_AVOID, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable the previously described scheduling of conflicted NSIB
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_si_avoid()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::SI_AVOID, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable combined EPS/IMSI network attach
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_combine_attach()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::COMBINE_ATTACH, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable combined EPS/IMSI network attach
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_combine_attach()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::COMBINE_ATTACH, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable RRC cell reselection
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_cell_reselection()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::CELL_RESELECTION, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable RRC cell reselection
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_cell_reselection()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::CELL_RESELECTION, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Enable Bearer Independent Protocol (BIP) where BIP is the interface
+ *  between the SIM and the ME which provides access to the data bearers
+ *  supported by the ME
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_bip()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::ENABLE_BIP, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable previously described BIP functionality
+ * 
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_bip()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::ENABLE_BIP, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** When enabled, the SIM is only powered when it is accessed and will be 
+ *  un-powered when not required, i.e. when in PSM
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::enable_sim_power_save_mode()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::NAS_SIM_PSM_ENABLE, SaraN2::TRUE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Disable previously described SIM PSM
+ *
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::disable_sim_power_save_mode()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.configure_ue(SaraN2::NAS_SIM_PSM_ENABLE, SaraN2::FALSE);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Configure CoAP profile 0 with a given IP address, port and URI
@@ -164,9 +706,11 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri, uin
  *
  * @param *recv_data Pointer to a byte array that will be populated
  *              	 with the response from the server
+ * @param &response_code Address of integer where CoAP operation response code
+ *                       will be stored
  * @return Indicates success or failure reason
  */
-int TP_NBIoT_Interface::coap_get(char *recv_data)
+int TP_NBIoT_Interface::coap_get(char *recv_data, int &response_code)
 {
 	int status = -1;
 
@@ -184,7 +728,7 @@ int TP_NBIoT_Interface::coap_get(char *recv_data)
 			return status;
 		}
 
-		status = _modem.coap_get(recv_data);
+		status = _modem.coap_get(recv_data, response_code);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
@@ -201,9 +745,11 @@ int TP_NBIoT_Interface::coap_get(char *recv_data)
  *
  * @param *recv_data Pointer to a byte array that will be populated
  *              	 with the response from the server
+ * @param &response_code Address of integer where CoAP operation response code
+ *                       will be stored
  * @return Indicates success or failure reason
  */
-int TP_NBIoT_Interface::coap_delete(char *recv_data)
+int TP_NBIoT_Interface::coap_delete(char *recv_data, int &response_code)
 {
 	int status = -1;
 
@@ -221,7 +767,7 @@ int TP_NBIoT_Interface::coap_delete(char *recv_data)
 			return status;
 		}
 
-		status = _modem.coap_delete(recv_data);
+		status = _modem.coap_delete(recv_data, response_code);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
@@ -243,9 +789,11 @@ int TP_NBIoT_Interface::coap_delete(char *recv_data)
  * @param data_intenfier Integer value representing the data 
  *                       format type. Possible values are enumerated
  *                       in the driver header file, i.e. TEXT_PLAIN
+ * @param &response_code Address of integer where CoAP operation response code
+ *                       will be stored
  * @return Indicates success or failure reason
  */ 
-int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_indentifier)
+int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_indentifier, int &response_code)
 {
 	int status = -1;
 
@@ -263,7 +811,7 @@ int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_inde
 			return status;
 		}
 
-		status = _modem.coap_put(send_data, recv_data, data_indentifier);
+		status = _modem.coap_put(send_data, recv_data, data_indentifier, response_code);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
@@ -285,9 +833,11 @@ int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_inde
  * @param data_intenfier Integer value representing the data 
  *                       format type. Possible values are enumerated
  *                       in the driver header file, i.e. SaraN2::TEXT_PLAIN
+ * @param &response_code Address of integer where CoAP operation response code
+ *                       will be stored
  * @return Indicates success or failure reason
  */ 
-int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_indentifier)
+int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_indentifier, int &response_code)
 {
 	int status = -1;
 
@@ -305,7 +855,7 @@ int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_ind
 			return status;
 		}
 
-		status = _modem.coap_post(send_data, recv_data, data_indentifier);
+		status = _modem.coap_post(send_data, recv_data, data_indentifier, response_code);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
@@ -315,5 +865,383 @@ int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_ind
 	}
 	
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Set T3412 timer to multiples of given units
+ * 
+ * @param unit Enumerated value within T3412_units enum class
+ * @param multiples Value no greater than 31 that determines
+ *                  how many multiples of unit to set the
+ *                  timer to
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::set_tau_timer(T3412_units unit, uint8_t multiples)
+{
+    if(multiples > 31)
+    {
+        return TP_NBIoT_Interface::EXCEEDS_MAX_VALUE;
+    }
+
+    char binary[8];
+    dec_to_bin_5_bit(multiples, binary);
+
+    char data[9];
+	memcpy(&data[8], &"\0", 1);
+
+    char unit_char[3];
+
+    switch(unit)
+    {
+        case T3412_units::HR_320: 
+        {
+            memcpy(&unit_char[0], &"110", 3);
+            break;
+        }
+        case T3412_units::HR_10: 
+        {
+            memcpy(&unit_char[0], &"010", 3);
+            break;
+        }
+        case T3412_units::HR_1: 
+        {
+            memcpy(&unit_char[0], &"001", 3);
+            break;
+        }
+        case T3412_units::MIN_10: 
+        {
+            memcpy(&unit_char[0], &"000", 3);
+            break;
+        }
+        case T3412_units::MIN_1: 
+        {
+            memcpy(&unit_char[0], &"101", 3);
+            break;
+        }
+        case T3412_units::SEC_30: 
+        {
+            memcpy(&unit_char[0], &"100", 3);
+            break;
+        }
+        case T3412_units::SEC_2: 
+        {
+            memcpy(&unit_char[0], &"011", 3);
+            break;
+        }
+        case T3412_units::DEACT: 
+        {
+            memcpy(&unit_char[0], &"111", 3);
+            break;
+        }
+		default:
+		{
+			return TP_NBIoT_Interface::INVALID_UNIT_VALUE;
+		}
+    }
+    
+    memcpy(&data[0], unit_char, 3);
+    memcpy(&data[3], &binary[0], 5);
+
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.set_t3412_timer(data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}   
+
+/** Retrieve T3412 timer value as binary string
+ * 
+ * @param *timer Pointer to char array in which to store
+ *               timer value as binary string
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_tau_timer(char *timer)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.get_t3412_timer(timer);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+	
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Retrieve T3412 timer value as units and multiples
+ * 
+ * @param &unit Address of T3412_units value into which
+ *              the determined timer unit will be stored
+ * @param &multiples Address of uint8_t into which 
+ *                   the determined multiples value will be 
+ *                   stored
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_tau_timer(T3412_units &unit, uint8_t &multiples)
+{
+	int status = -1;
+    char timer[10];
+
+    status = get_tau_timer(timer);
+    if(status != TP_NBIoT_Interface::NBIOT_OK)
+    {
+        return status;
+    }
+
+    if(strncmp(timer, "110", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::HR_320;
+    }
+    else if(strncmp(timer, "010", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::HR_10;
+    }
+    else if(strncmp(timer, "001", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::HR_1;
+    }
+    else if(strncmp(timer, "000", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::MIN_10;
+    }
+    else if(strncmp(timer, "101", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::MIN_1;
+    }
+    else if(strncmp(timer, "100", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::SEC_30;
+    }
+    else if(strncmp(timer, "011", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::SEC_2;
+    }
+    else if(strncmp(timer, "111", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::DEACT;
+    }
+    else
+    {
+        unit = TP_NBIoT_Interface::T3412_units::INVALID;
+    }
+
+    uint8_t binary_value = 16;
+    for(int i = 3; i < 8; i++)
+    {
+        if((int)timer[i] == 49) // 1
+        {
+            multiples = multiples + binary_value;
+        }
+        
+        if(binary_value == 1)
+        {
+            break;
+        }
+
+        binary_value = binary_value / 2;
+    }
+    
+    return TP_NBIoT_Interface::NBIOT_OK;
+}
+
+/** Set T3324 timer to multiples of given units
+ * 
+ * @param unit Enumerated value within T3324_units enum class
+ * @param multiples Value no greater than 31 that determines
+ *                  how many multiples of unit to set the
+ *                  timer to
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::set_active_time(T3324_units unit, uint8_t multiples)
+{
+	if(multiples > 31)
+	{
+		return TP_NBIoT_Interface::EXCEEDS_MAX_VALUE;
+	}
+
+	char binary[8];
+    dec_to_bin_5_bit(multiples, binary);
+
+    char data[9];
+	memcpy(&data[8], &"\0", 1);
+
+    char unit_char[3];
+
+	switch(unit)
+	{
+		case T3324_units::MIN_6:
+		{
+			memcpy(&unit_char[0], &"010", 3);
+			break;
+		}
+		case T3324_units::MIN_1:
+		{
+			memcpy(&unit_char[0], &"001", 3);
+			break;
+		}
+		case T3324_units::SEC_2:
+		{
+			memcpy(&unit_char[0], &"000", 3);
+			break;
+		}
+		case T3324_units::DEACT:
+		{
+			memcpy(&unit_char[0], &"111", 3);
+			break;
+		}
+		default:
+		{
+			return TP_NBIoT_Interface::INVALID_UNIT_VALUE;
+		}
+	}
+
+	memcpy(&data[0], unit_char, 3);
+    memcpy(&data[3], &binary[0], 5);
+
+    int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.set_t3324_timer(data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Retrieve T3324 timer value as binary string
+ * 
+ * @param *timer Pointer to char array in which to store
+ *               timer value as binary string
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_active_time(char *timer)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.get_t3324_timer(timer);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+	
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Retrieve T3324 timer value as units and multiples
+ * 
+ * @param &unit Address of T3324_units value into which
+ *              the determined timer unit will be stored
+ * @param &multiples Address of uint8_t into which 
+ *                   the determined multiples value will be 
+ *                   stored
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_active_time(T3324_units &unit, uint8_t &multiples)
+{
+	int status = -1;
+    char timer[10];
+
+    status = get_active_time(timer);
+    if(status != TP_NBIoT_Interface::NBIOT_OK)
+    {
+        return status;
+    }
+
+    if(strncmp(timer, "010", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::MIN_6;
+    }
+    else if(strncmp(timer, "001", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::MIN_1;
+    }
+    else if(strncmp(timer, "000", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::SEC_2;
+    }
+    else if(strncmp(timer, "111", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::DEACT;
+    }
+    else
+    {
+        unit = TP_NBIoT_Interface::T3324_units::INVALID;
+    }
+
+    uint8_t binary_value = 16;
+    for(int i = 3; i < 8; i++)
+    {
+        if((int)timer[i] == 49) // 1
+        {
+            multiples = multiples + binary_value;
+        }
+        
+        if(binary_value == 1)
+        {
+            break;
+        }
+
+        binary_value = binary_value / 2;
+    }
+    
+    return TP_NBIoT_Interface::NBIOT_OK;
+}
+
+/** Convert decimal number (with max value of 5-bits) to a binary string,
+ *  i.e. 10 = "01010"
+ * 
+ * @param multiples Decimal value to convert to binary
+ * @param *binary Pointer to a char array to which to return 
+ *                the binary string
+ * @return None
+ */
+void TP_NBIoT_Interface::dec_to_bin_5_bit(uint8_t multiples, char *binary)
+{
+    int buffer[8];
+    int i = 0;
+
+    for(i; multiples > 0; i++)
+    {
+        buffer[i] = multiples % 2;
+        multiples = multiples / 2;
+    }
+
+    int padding = 5 - i;
+
+    for(int j = 0; j < padding; j++)
+    {
+        sprintf(&binary[j], "%d", 0);
+    }
+
+    int index = 4 - padding;
+    for(padding; padding < 5; padding++)
+    {
+        sprintf(&binary[padding], "%d", buffer[index]);
+        index--;
+    }
 }
 
