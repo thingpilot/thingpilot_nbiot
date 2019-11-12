@@ -29,18 +29,23 @@
 
 #endif /* #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0) */
 
-
+/** Base class for the Thingpilot NB-IoT interface
+ */
 class TP_NBIoT_Interface
 {
 
 	public:
 
+		/** Possible _driver values
+		 */
 		enum
 		{
 			UNDEFINED = 0,
 			SARAN2    = 1
 		};
 
+		/** Function return codes
+		 */
 		enum
 		{
 			NBIOT_OK           = 0,
@@ -49,6 +54,8 @@ class TP_NBIoT_Interface
 			INVALID_UNIT_VALUE = 42
 		};
 
+		/** List of possible T3412 timer units
+		 */
 		enum class T3412_units
 		{
 			HR_320  = 0, // 1 1 0
@@ -62,6 +69,8 @@ class TP_NBIoT_Interface
             INVALID = 8
 		};
 
+		/** List of possible T3324 timer units
+		 */
 		enum class T3324_units
 		{
 			MIN_6   = 0, // 0 1 0
