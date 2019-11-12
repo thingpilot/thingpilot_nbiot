@@ -834,7 +834,69 @@ int TP_NBIoT_Interface::get_tau_timer(char* timer)
 
 int TP_NBIoT_Interface::get_tau_timer(T3412_units &unit, uint8_t &multiples)
 {
-	return TP_NBIoT_Interface::NBIOT_OK;
+	int status = -1;
+    char timer[10];
+
+    status = get_tau_timer(timer);
+    if(status != TP_NBIoT_Interface::NBIOT_OK)
+    {
+        return status;
+    }
+
+    if(strncmp(timer, "110", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::HR_320;
+    }
+    else if(strncmp(timer, "010", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::HR_10;
+    }
+    else if(strncmp(timer, "001", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::HR_1;
+    }
+    else if(strncmp(timer, "000", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::MIN_10;
+    }
+    else if(strncmp(timer, "101", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::MIN_1;
+    }
+    else if(strncmp(timer, "100", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::SEC_30;
+    }
+    else if(strncmp(timer, "011", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::SEC_2;
+    }
+    else if(strncmp(timer, "111", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3412_units::DEACT;
+    }
+    else
+    {
+        unit = TP_NBIoT_Interface::T3412_units::INVALID;
+    }
+
+    uint8_t binary_value = 16;
+    for(int i = 3; i < 8; i++)
+    {
+        if((int)timer[i] == 49) // 1
+        {
+            multiples = multiples + binary_value;
+        }
+        
+        if(binary_value == 1)
+        {
+            break;
+        }
+
+        binary_value = binary_value / 2;
+    }
+    
+    return TP_NBIoT_Interface::NBIOT_OK;
 }
 
 
@@ -918,7 +980,53 @@ int TP_NBIoT_Interface::get_active_time(char* timer)
 
 int TP_NBIoT_Interface::get_active_time(T3324_units &unit, uint8_t &multiples)
 {
-	return TP_NBIoT_Interface::NBIOT_OK;
+	int status = -1;
+    char timer[10];
+
+    status = get_active_time(timer);
+    if(status != TP_NBIoT_Interface::NBIOT_OK)
+    {
+        return status;
+    }
+
+    if(strncmp(timer, "010", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::MIN_6;
+    }
+    else if(strncmp(timer, "001", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::MIN_1;
+    }
+    else if(strncmp(timer, "000", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::SEC_2;
+    }
+    else if(strncmp(timer, "111", 3) == 0)
+    {
+        unit = TP_NBIoT_Interface::T3324_units::DEACT;
+    }
+    else
+    {
+        unit = TP_NBIoT_Interface::T3324_units::INVALID;
+    }
+
+    uint8_t binary_value = 16;
+    for(int i = 3; i < 8; i++)
+    {
+        if((int)timer[i] == 49) // 1
+        {
+            multiples = multiples + binary_value;
+        }
+        
+        if(binary_value == 1)
+        {
+            break;
+        }
+
+        binary_value = binary_value / 2;
+    }
+    
+    return TP_NBIoT_Interface::NBIOT_OK;
 }
 
 
