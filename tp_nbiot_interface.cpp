@@ -734,7 +734,14 @@ int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_ind
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
-
+/** Set T3412 timer to multiples of given units
+ * 
+ * @param unit Enumerated value within T3412_units enum class
+ * @param multiples Value no greater than 31 that determines
+ *                  how many multiples of unit to set the
+ *                  timer to
+ * @return Indicates success or failure reason
+ */
 int TP_NBIoT_Interface::set_tau_timer(T3412_units unit, uint8_t multiples)
 {
     if(multiples > 31)
@@ -813,8 +820,13 @@ int TP_NBIoT_Interface::set_tau_timer(T3412_units unit, uint8_t multiples)
     return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }   
 
-
-int TP_NBIoT_Interface::get_tau_timer(char* timer)
+/** Retrieve T3412 timer value as binary string
+ * 
+ * @param *timer Pointer to char array in which to store
+ *               timer value as binary string
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_tau_timer(char *timer)
 {
 	int status = -1;
 
@@ -832,6 +844,15 @@ int TP_NBIoT_Interface::get_tau_timer(char* timer)
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Retrieve T3412 timer value as units and multiples
+ * 
+ * @param &unit Address of T3412_units value into which
+ *              the determined timer unit will be stored
+ * @param &multiples Address of uint8_t into which 
+ *                   the determined multiples value will be 
+ *                   stored
+ * @return Indicates success or failure reason
+ */
 int TP_NBIoT_Interface::get_tau_timer(T3412_units &unit, uint8_t &multiples)
 {
 	int status = -1;
@@ -899,8 +920,14 @@ int TP_NBIoT_Interface::get_tau_timer(T3412_units &unit, uint8_t &multiples)
     return TP_NBIoT_Interface::NBIOT_OK;
 }
 
-
-
+/** Set T3324 timer to multiples of given units
+ * 
+ * @param unit Enumerated value within T3324_units enum class
+ * @param multiples Value no greater than 31 that determines
+ *                  how many multiples of unit to set the
+ *                  timer to
+ * @return Indicates success or failure reason
+ */
 int TP_NBIoT_Interface::set_active_time(T3324_units unit, uint8_t multiples)
 {
 	if(multiples > 31)
@@ -959,8 +986,13 @@ int TP_NBIoT_Interface::set_active_time(T3324_units unit, uint8_t multiples)
     return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
-
-int TP_NBIoT_Interface::get_active_time(char* timer)
+/** Retrieve T3324 timer value as binary string
+ * 
+ * @param *timer Pointer to char array in which to store
+ *               timer value as binary string
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_active_time(char *timer)
 {
 	int status = -1;
 
@@ -978,6 +1010,15 @@ int TP_NBIoT_Interface::get_active_time(char* timer)
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Retrieve T3324 timer value as units and multiples
+ * 
+ * @param &unit Address of T3324_units value into which
+ *              the determined timer unit will be stored
+ * @param &multiples Address of uint8_t into which 
+ *                   the determined multiples value will be 
+ *                   stored
+ * @return Indicates success or failure reason
+ */
 int TP_NBIoT_Interface::get_active_time(T3324_units &unit, uint8_t &multiples)
 {
 	int status = -1;

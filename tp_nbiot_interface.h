@@ -299,16 +299,62 @@ class TP_NBIoT_Interface
 		 */ 
 		int coap_post(char *send_data, char *recv_data, int data_indentifier, int &response_code);
 
+		/** Set T3412 timer to multiples of given units
+		 * 
+		 * @param unit Enumerated value within T3412_units enum class
+		 * @param multiples Value no greater than 31 that determines
+		 *                  how many multiples of unit to set the
+		 *                  timer to
+		 * @return Indicates success or failure reason
+		 */
 		int set_tau_timer(T3412_units unit, uint8_t multiples);
 
-		int get_tau_timer(char* timer);
+		/** Retrieve T3412 timer value as binary string
+		 * 
+		 * @param *timer Pointer to char array in which to store
+		 *               timer value as binary string
+		 * @return Indicates success or failure reason
+		 */
+		int get_tau_timer(char *timer);
 
+		/** Retrieve T3412 timer value as units and multiples
+		 * 
+		 * @param &unit Address of T3412_units value into which
+		 *              the determined timer unit will be stored
+		 * @param &multiples Address of uint8_t into which 
+		 *                   the determined multiples value will be 
+		 *                   stored
+		 * @return Indicates success or failure reason
+		 */
 		int get_tau_timer(T3412_units &unit, uint8_t &multiples);
 
+		/** Set T3324 timer to multiples of given units
+		 * 
+		 * @param unit Enumerated value within T3324_units enum class
+		 * @param multiples Value no greater than 31 that determines
+		 *                  how many multiples of unit to set the
+		 *                  timer to
+		 * @return Indicates success or failure reason
+		 */
 		int set_active_time(T3324_units unit, uint8_t multiples);
 
-		int get_active_time(char* timer);
+		/** Retrieve T3324 timer value as binary string
+		 * 
+		 * @param *timer Pointer to char array in which to store
+		 *               timer value as binary string
+		 * @return Indicates success or failure reason
+		 */
+		int get_active_time(char *timer);
 
+		/** Retrieve T3324 timer value as units and multiples
+		 * 
+		 * @param &unit Address of T3324_units value into which
+		 *              the determined timer unit will be stored
+		 * @param &multiples Address of uint8_t into which 
+		 *                   the determined multiples value will be 
+		 *                   stored
+		 * @return Indicates success or failure reason
+		 */
 		int get_active_time(T3324_units &unit, uint8_t &multiples);
 
 
