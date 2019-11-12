@@ -816,7 +816,20 @@ int TP_NBIoT_Interface::set_tau_timer(T3412_units unit, uint8_t multiples)
 
 int TP_NBIoT_Interface::get_tau_timer(char* timer)
 {
-	return TP_NBIoT_Interface::NBIOT_OK;
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.get_t3412_timer(timer);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+	
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 int TP_NBIoT_Interface::get_tau_timer(T3412_units &unit, uint8_t &multiples)
@@ -887,7 +900,20 @@ int TP_NBIoT_Interface::set_active_time(T3324_units unit, uint8_t multiples)
 
 int TP_NBIoT_Interface::get_active_time(char* timer)
 {
-	return TP_NBIoT_Interface::NBIOT_OK;
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.get_t3324_timer(timer);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+	
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 int TP_NBIoT_Interface::get_active_time(T3324_units &unit, uint8_t &multiples)
