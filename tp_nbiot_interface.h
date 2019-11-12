@@ -49,9 +49,9 @@ class TP_NBIoT_Interface
 		enum
 		{
 			NBIOT_OK           = 0,
-			DRIVER_UNKNOWN     = 40,
-			EXCEEDS_MAX_VALUE  = 41,
-			INVALID_UNIT_VALUE = 42
+			DRIVER_UNKNOWN     = 60,
+			EXCEEDS_MAX_VALUE  = 61,
+			INVALID_UNIT_VALUE = 62
 		};
 
 		/** List of possible T3412 timer units
