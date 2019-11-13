@@ -288,6 +288,14 @@ class TP_NBIoT_Interface
 		 */
         int query_power_save_mode(int &power_save_mode);
 
+		/** Determine whether or not the modem is in power save mode or not
+		 * 
+		 * @param &psm Address of integer in which to store actual PSM value,
+		 *             1 = in PSM, 0 = active
+		 * @return Indicates success or failure reason
+		 */ 
+		int get_power_save_mode_status(int &psm);
+
         /** Configure CoAP profile 0 with a given IP address, port and URI
          *
          * @param *ipv4 Pointer to a byte array storing the IPv4 address of the 

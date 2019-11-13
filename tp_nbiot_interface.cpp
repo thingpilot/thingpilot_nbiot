@@ -245,7 +245,7 @@ int TP_NBIoT_Interface::disable_power_save_mode()
  * @param &power_save_mode Address of integer in which to store
  *                         value of power save mode setting. 1 
  *                         means that PSM is enabled, 0 means 
- *                         that PSM is disable
+ *                         that PSM is disabled
  * @return Indicates success or failure reason
  */
 int TP_NBIoT_Interface::query_power_save_mode(int &power_save_mode)
@@ -255,6 +255,30 @@ int TP_NBIoT_Interface::query_power_save_mode(int &power_save_mode)
 	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
 		status = _modem.query_power_save_mode(power_save_mode);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Determine whether or not the modem is in power save mode or not
+ * 
+ * @param &psm Address of integer in which to store actual PSM value,
+ *             1 = in PSM, 0 = active
+ * @return Indicates success or failure reason
+ */ 
+int TP_NBIoT_Interface::get_power_save_mode_status(int &psm)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.npsmr(psm);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
