@@ -300,6 +300,33 @@ int TP_NBIoT_Interface::get_connection_status(int &connected, int &reg_status)
     return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+
+/** Get last known RSRP and RSRQ
+ * 
+ * @param &power Address of integer in which to return
+ *               last known RSRP
+ * @param &quality Address of integer in which to return
+ *                 last known RSRQ
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_csq(int &power, int &quality)
+{
+    int status = -1;
+
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        status = _modem.csq(power, quality);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
+        }
+
+        return TP_NBIoT_Interface::NBIOT_OK;
+    }
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Return operation stats, of a given type, of the module
  * 
  * @param *data Point to .data parameter of Nuestats_t struct

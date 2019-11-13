@@ -167,6 +167,16 @@ class TP_NBIoT_Interface
 		 */
         int get_connection_status(int &connected, int &reg_status);
 
+        /** Get last known RSRP and RSRQ
+        * 
+        * @param &power Address of integer in which to return
+        *               last known RSRP
+        * @param &quality Address of integer in which to return
+        *                 last known RSRQ
+        * @return Indicates success or failure reason
+        */
+        int get_csq(int &power, int &quality);
+
 		/** Return operation stats, of a given type, of the module
          * 
          * @param *data Point to .data parameter of Nuestats_t struct
