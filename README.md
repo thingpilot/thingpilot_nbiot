@@ -1,4 +1,10 @@
 ## Thingpilot NB-IoT Interface Release Notes
+**v0.3.0** *14/11/2019*
+
+- Perform AT+CSQ for RSRP/RSRQ parameters
+- Query current PSM status of the module
+- Return u-blox defined connection status according to section 8.4 of the [u-blox NB-IoT Application Development guide](https://www.u-blox.com/sites/default/files/SARA-N2-Application-Development_AppNote_%28UBX-16017368%29.pdf)
+
 **v0.2.0** *12/11/2019*
 
 - Return CoAP request response code to application layer

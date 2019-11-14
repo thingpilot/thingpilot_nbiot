@@ -1,6 +1,6 @@
 /**
   * @file    tp_nbiot_interface.cpp
-  * @version 0.2.0
+  * @version 0.3.0
   * @author  Adam Mitchell
   * @brief   C++ file of the Thingpilot NB-IoT interface. This interface is hardware agnostic
   *          and depends on the underlying modem drivers exposing an identical interface
