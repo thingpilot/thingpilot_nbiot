@@ -1,6 +1,6 @@
 /**
   * @file    tp_nbiot_interface.cpp
-  * @version 0.2.0
+  * @version 0.3.0
   * @author  Adam Mitchell
   * @brief   C++ file of the Thingpilot NB-IoT interface. This interface is hardware agnostic
   *          and depends on the underlying modem drivers exposing an identical interface
@@ -245,7 +245,7 @@ int TP_NBIoT_Interface::disable_power_save_mode()
  * @param &power_save_mode Address of integer in which to store
  *                         value of power save mode setting. 1 
  *                         means that PSM is enabled, 0 means 
- *                         that PSM is disable
+ *                         that PSM is disabled
  * @return Indicates success or failure reason
  */
 int TP_NBIoT_Interface::query_power_save_mode(int &power_save_mode)
@@ -258,6 +258,102 @@ int TP_NBIoT_Interface::query_power_save_mode(int &power_save_mode)
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
 			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Determine whether or not the modem is in power save mode or not
+ * 
+ * @param &psm Address of integer in which to store actual PSM value,
+ *             1 = in PSM, 0 = active
+ * @return Indicates success or failure reason
+ */ 
+int TP_NBIoT_Interface::get_power_save_mode_status(int &psm)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.npsmr(psm);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Return u-blox defined connection status based on radio connection status, 
+ *  network registration status and PSM status. This document can be found in 8.4
+ *  at https://www.u-blox.com/sites/default/files/SARA-N2-Application-Development_AppNote_%28UBX-16017368%29.pdf
+ * 
+ * @param &status Address of TP_Connection_Status to return u-blox defined connection
+ *                status to
+ * @param &connected Address of integer value in which to store radio connection status
+ *                   where 1 = connected and 0 is not connected
+ * @param &registered Address of integer value in which to store network registration
+ *                    status. See AT+CEREG=0/AT+CEREG? for possible values
+ * @param &psm Address of integer value in which to store PSM status where 1 = in PSM
+ *             and 0 is in Active mode
+ * @return Indicates success or failure reason
+ */ 
+int TP_NBIoT_Interface::get_module_network_status(TP_Connection_Status &status, int &connected, 
+                                                  int &registered, int &psm)
+{
+	int func_status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		func_status = get_connection_status(connected, registered);
+		if(func_status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return func_status;
+		}
+
+		func_status = get_power_save_mode_status(psm);
+		if(func_status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return func_status;
+		}
+
+		if(registered == 0 && connected == 0 && psm == 0)
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_NO_NETWORK_ACTIVITY;
+		}
+		else if(registered == 2 && connected == 0 && psm == 0)
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_SCANNING_FOR_BASE_STATION;
+		}
+		else if(registered == 2 && connected == 1 && psm == 0)
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_STARTING_REGISTRATION;
+		}
+		else if((registered == 1 || registered == 5) && (connected == 1 && psm == 0))
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_REGISTERED_RRC_CONNECTED;
+		}
+		else if((registered == 1 || registered == 5) && (connected == 0 && psm == 0))
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_REGISTERED_RRC_RELEASED;
+		}
+		else if((registered == 1 || registered == 5) && (connected == 0 && psm == 1))
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::PSM_REGISTERED;
+		}
+		else if(registered == 3)
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::REGISTRATION_FAILED;
+		}
+		else
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::STATE_UNDEFINED;
 		}
 
 		return TP_NBIoT_Interface::NBIOT_OK;
@@ -289,6 +385,33 @@ int TP_NBIoT_Interface::get_connection_status(int &connected, int &reg_status)
         }
 
         status = _modem.cereg(urc, reg_status);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
+        }
+
+        return TP_NBIoT_Interface::NBIOT_OK;
+    }
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+
+/** Get last known RSRP and RSRQ
+ * 
+ * @param &power Address of integer in which to return
+ *               last known RSRP
+ * @param &quality Address of integer in which to return
+ *                 last known RSRQ
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_csq(int &power, int &quality)
+{
+    int status = -1;
+
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        status = _modem.csq(power, quality);
         if(status != TP_NBIoT_Interface::NBIOT_OK)
         {
             return status;
