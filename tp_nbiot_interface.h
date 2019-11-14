@@ -173,6 +173,20 @@ class TP_NBIoT_Interface
 		 */
 		int disable_power_save_mode();
 
+		/** Return u-blox defined connection status based on radio connection status, 
+		 *  network registration status and PSM status. This document can be found in 8.4
+		 *  at https://www.u-blox.com/sites/default/files/SARA-N2-Application-Development_AppNote_%28UBX-16017368%29.pdf
+		 * 
+		 * @param &status Address of TP_Connection_Status to return u-blox defined connection
+		 *                status to
+		 * @param &connected Address of integer value in which to store radio connection status
+		 *                   where 1 = connected and 0 is not connected
+		 * @param &registered Address of integer value in which to store network registration
+		 *                    status. See AT+CEREG=0/AT+CEREG? for possible values
+		 * @param &psm Address of integer value in which to store PSM status where 1 = in PSM
+		 *             and 0 is in Active mode
+		 * @return Indicates success or failure reason
+		 */ 
 		int get_module_network_status(TP_Connection_Status &status, int &connected, 
 									  int &registered, int &psm);
 
