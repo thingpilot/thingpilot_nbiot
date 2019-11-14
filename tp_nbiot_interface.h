@@ -54,6 +54,22 @@ class TP_NBIoT_Interface
 			INVALID_UNIT_VALUE = 62
 		};
 
+		/** Connection status matrix values according to u-blox NB-IoT
+		 *  application development guide:
+		 *  https://www.u-blox.com/sites/default/files/SARA-N2-Application-Development_AppNote_%28UBX-16017368%29.pdf
+		 */
+		enum class TP_Connection_Status
+		{
+			ACTIVE_NO_NETWORK_ACTIVITY       = 0,
+			ACTIVE_SCANNING_FOR_BASE_STATION = 1,
+			ACTIVE_STARTING_REGISTRATION     = 2,
+			ACTIVE_REGISTERED_RRC_CONNECTED  = 3,
+			ACTIVE_REGISTERED_RRC_RELEASED   = 4,
+			PSM_REGISTERED                   = 5,
+			REGISTRATION_FAILED              = 6,
+			STATE_UNDEFINED                  = 7
+		};
+
 		/** List of possible T3412 timer units
 		 */
 		enum class T3412_units
@@ -157,6 +173,23 @@ class TP_NBIoT_Interface
 		 */
 		int disable_power_save_mode();
 
+		/** Return u-blox defined connection status based on radio connection status, 
+		 *  network registration status and PSM status. This document can be found in 8.4
+		 *  at https://www.u-blox.com/sites/default/files/SARA-N2-Application-Development_AppNote_%28UBX-16017368%29.pdf
+		 * 
+		 * @param &status Address of TP_Connection_Status to return u-blox defined connection
+		 *                status to
+		 * @param &connected Address of integer value in which to store radio connection status
+		 *                   where 1 = connected and 0 is not connected
+		 * @param &registered Address of integer value in which to store network registration
+		 *                    status. See AT+CEREG=0/AT+CEREG? for possible values
+		 * @param &psm Address of integer value in which to store PSM status where 1 = in PSM
+		 *             and 0 is in Active mode
+		 * @return Indicates success or failure reason
+		 */ 
+		int get_module_network_status(TP_Connection_Status &status, int &connected, 
+									  int &registered, int &psm);
+
 		/** Query UE for radio connection and network registration status
 		 * 
 		 * @param &connected Address of integer in which to store radio 
@@ -166,6 +199,16 @@ class TP_NBIoT_Interface
 		 * @return Indicates success or failure reason
 		 */
         int get_connection_status(int &connected, int &reg_status);
+
+        /** Get last known RSRP and RSRQ
+        * 
+        * @param &power Address of integer in which to return
+        *               last known RSRP
+        * @param &quality Address of integer in which to return
+        *                 last known RSRQ
+        * @return Indicates success or failure reason
+        */
+        int get_csq(int &power, int &quality);
 
 		/** Return operation stats, of a given type, of the module
          * 
@@ -277,6 +320,14 @@ class TP_NBIoT_Interface
 		 * @return Indicates success or failure reason
 		 */
         int query_power_save_mode(int &power_save_mode);
+
+		/** Determine whether or not the modem is in power save mode or not
+		 * 
+		 * @param &psm Address of integer in which to store actual PSM value,
+		 *             1 = in PSM, 0 = active
+		 * @return Indicates success or failure reason
+		 */ 
+		int get_power_save_mode_status(int &psm);
 
         /** Configure CoAP profile 0 with a given IP address, port and URI
          *
