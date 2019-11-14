@@ -54,6 +54,22 @@ class TP_NBIoT_Interface
 			INVALID_UNIT_VALUE = 62
 		};
 
+		/** Connection status matrix values according to u-blox NB-IoT
+		 *  application development guide:
+		 *  https://www.u-blox.com/sites/default/files/SARA-N2-Application-Development_AppNote_%28UBX-16017368%29.pdf
+		 */
+		enum class TP_Connection_Status
+		{
+			ACTIVE_NO_NETWORK_ACTIVITY       = 0,
+			ACTIVE_SCANNING_FOR_BASE_STATION = 1,
+			ACTIVE_STARTING_REGISTRATION     = 2,
+			ACTIVE_REGISTERED_RRC_CONNECTED  = 3,
+			ACTIVE_REGISTERED_RRC_RELEASED   = 4,
+			PSM_REGISTERED                   = 5,
+			REGISTRATION_FAILED              = 6,
+			STATE_UNDEFINED                  = 7
+		};
+
 		/** List of possible T3412 timer units
 		 */
 		enum class T3412_units
@@ -156,6 +172,9 @@ class TP_NBIoT_Interface
 		 * @return Indicates success or failure reason
 		 */
 		int disable_power_save_mode();
+
+		int get_module_network_status(TP_Connection_Status &status, int &connected, 
+									  int &registered, int &psm);
 
 		/** Query UE for radio connection and network registration status
 		 * 

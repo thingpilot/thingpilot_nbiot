@@ -290,6 +290,64 @@ int TP_NBIoT_Interface::get_power_save_mode_status(int &psm)
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+int TP_NBIoT_Interface::get_module_network_status(TP_Connection_Status &status, int &connected, 
+                                                  int &registered, int &psm)
+{
+	int func_status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		func_status = get_connection_status(connected, registered);
+		if(func_status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return func_status;
+		}
+
+		func_status = get_power_save_mode_status(psm);
+		if(func_status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return func_status;
+		}
+
+		if(registered == 0 && connected == 0 && psm == 0)
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_NO_NETWORK_ACTIVITY;
+		}
+		else if(registered == 2 && connected == 0 && psm == 0)
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_SCANNING_FOR_BASE_STATION;
+		}
+		else if(registered == 2 && connected == 1 && psm == 0)
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_STARTING_REGISTRATION;
+		}
+		else if((registered == 1 || registered == 5) && (connected == 1 && psm == 0))
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_REGISTERED_RRC_CONNECTED;
+		}
+		else if((registered == 1 || registered == 5) && (connected == 0 && psm == 0))
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::ACTIVE_REGISTERED_RRC_RELEASED;
+		}
+		else if((registered == 1 || registered == 5) && (connected == 0 && psm == 1))
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::PSM_REGISTERED;
+		}
+		else if(registered == 3)
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::REGISTRATION_FAILED;
+		}
+		else
+		{
+			status = TP_NBIoT_Interface::TP_Connection_Status::STATE_UNDEFINED;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Query UE for radio connection and network registration status
  * 
  * @param &connected Address of integer in which to store radio 
