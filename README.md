@@ -1,4 +1,10 @@
 ## Thingpilot NB-IoT Interface Release Notes
+**v0.3.1** *15/11/2019*
+
+- Add .start() function. This will initialise the modem into a state whereby it will automatically attempt network connection and registration and enter PSM where possible
+- Ability to determine LTE EARFCN
+- No longer require board.h from board_definitions due to implementation of custom Mbed targets, found in [mbed targets](https://github.com/thingpilot/mbed_targets)
+
 **v0.3.0** *14/11/2019*
 
 - Perform AT+CSQ for RSRP/RSRQ parameters
