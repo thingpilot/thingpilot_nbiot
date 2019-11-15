@@ -53,6 +53,15 @@ class TP_NBIoT_Interface
 			INVALID_UNIT_VALUE = 62
 		};
 
+		/** LTE Bands
+		 */
+		enum class TP_NBIoT_Band
+		{
+			BAND_8  	 = 0,
+			BAND_20 	 = 1,
+			BAND_UNKNOWN = 2
+		};
+
 		/** Connection status matrix values according to u-blox NB-IoT
 		 *  application development guide:
 		 *  https://www.u-blox.com/sites/default/files/SARA-N2-Application-Development_AppNote_%28UBX-16017368%29.pdf
@@ -208,6 +217,14 @@ class TP_NBIoT_Interface
         * @return Indicates success or failure reason
         */
         int get_csq(int &power, int &quality);
+
+		/** Return LTE channel number, EARFCN
+		 * 
+		 * @param &band Address of TP_NBIoT_Band value in which to store
+		 *              determined EARFCN
+		 * @return Indicates success or failure reason
+		 */
+		int get_band(TP_NBIoT_Band &band);
 
 		/** Return operation stats, of a given type, of the module
          * 

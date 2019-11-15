@@ -423,6 +423,45 @@ int TP_NBIoT_Interface::get_csq(int &power, int &quality)
     return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Return LTE channel number, EARFCN
+ * 
+ * @param &band Address of TP_NBIoT_Band value in which to store
+ *              determined EARFCN
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_band(TP_NBIoT_Band &band)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		SaraN2::Nuestats_t stats;
+
+		status = get_nuestats(stats.data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		if(stats.parameters.earfcn >= EARFCN_B8_LOW && stats.parameters.earfcn <= EARFCN_B8_HIGH)
+		{
+			band = TP_NBIoT_Interface::TP_NBIoT_Band::BAND_8;
+		}
+		else if(stats.parameters.earfcn >= EARFCN_B20_LOW && stats.parameters.earfcn <= EARFCN_B20_HIGH)
+		{
+			band = TP_NBIoT_Interface::TP_NBIoT_Band::BAND_20;
+		}
+		else 
+		{
+			band = TP_NBIoT_Interface::TP_NBIoT_Band::BAND_UNKNOWN;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Return operation stats, of a given type, of the module
  * 
  * @param *data Point to .data parameter of Nuestats_t struct
