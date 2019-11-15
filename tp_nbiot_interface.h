@@ -50,7 +50,8 @@ class TP_NBIoT_Interface
 			NBIOT_OK           = 0,
 			DRIVER_UNKNOWN     = 60,
 			EXCEEDS_MAX_VALUE  = 61,
-			INVALID_UNIT_VALUE = 62
+			INVALID_UNIT_VALUE = 62,
+			FAIL_TO_CONNECT    = 63
 		};
 
 		/** LTE Bands
@@ -125,6 +126,8 @@ class TP_NBIoT_Interface
         /** Destructor for the TP_NBIoT_Interface class
          */
 		~TP_NBIoT_Interface();
+
+		int start();
 
 		/** Power-cycle the NB-IoT modem
 		 * 
