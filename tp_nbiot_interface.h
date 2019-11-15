@@ -1,6 +1,6 @@
 /**
   * @file    tp_nbiot_interface.h
-  * @version 0.3.0
+  * @version 0.3.1
   * @author  Adam Mitchell
   * @brief   Header file of the Thingpilot NB-IoT interface. This interface is hardware agnostic
   *          and depends on the underlying modem drivers exposing an identical interface
@@ -13,7 +13,6 @@
 /** Includes 
  */
 #include <mbed.h>
-#include "board.h"
 
 /** NB-IoT #defines 
  */
@@ -51,7 +50,17 @@ class TP_NBIoT_Interface
 			NBIOT_OK           = 0,
 			DRIVER_UNKNOWN     = 60,
 			EXCEEDS_MAX_VALUE  = 61,
-			INVALID_UNIT_VALUE = 62
+			INVALID_UNIT_VALUE = 62,
+			FAIL_TO_CONNECT    = 63
+		};
+
+		/** LTE Bands
+		 */
+		enum class TP_NBIoT_Band
+		{
+			BAND_8  	 = 0,
+			BAND_20 	 = 1,
+			BAND_UNKNOWN = 2
 		};
 
 		/** Connection status matrix values according to u-blox NB-IoT
@@ -117,6 +126,22 @@ class TP_NBIoT_Interface
         /** Destructor for the TP_NBIoT_Interface class
          */
 		~TP_NBIoT_Interface();
+
+		/** Initialise the modem with default parameters:
+		 *  AUTOCONNECT = TRUE
+		 *  CELL_RESELECTION = TRUE
+		 *  SIM_PSM = TRUE
+		 *  MODULE_PSM = TRUE
+		 * 
+		 *  Then attempt to connect to a network for 5 minutes; if this is 
+		 *  unsuccessful then turn off the modem and report that status
+		 *  back to the application. If it is successful then the modem 
+		 *  may not necessarily enter PSM instantly - this is determined by
+		 *  T3324/T3412 timer settings
+		 * 
+		 * @return Inidicates success or failure reason
+		 */
+		int start();
 
 		/** Power-cycle the NB-IoT modem
 		 * 
@@ -209,6 +234,14 @@ class TP_NBIoT_Interface
         * @return Indicates success or failure reason
         */
         int get_csq(int &power, int &quality);
+
+		/** Return LTE channel number, EARFCN
+		 * 
+		 * @param &band Address of TP_NBIoT_Band value in which to store
+		 *              determined EARFCN
+		 * @return Indicates success or failure reason
+		 */
+		int get_band(TP_NBIoT_Band &band);
 
 		/** Return operation stats, of a given type, of the module
          * 

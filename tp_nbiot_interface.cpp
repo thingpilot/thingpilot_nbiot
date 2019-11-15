@@ -1,6 +1,6 @@
 /**
   * @file    tp_nbiot_interface.cpp
-  * @version 0.3.0
+  * @version 0.3.1
   * @author  Adam Mitchell
   * @brief   C++ file of the Thingpilot NB-IoT interface. This interface is hardware agnostic
   *          and depends on the underlying modem drivers exposing an identical interface
@@ -39,6 +39,94 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
 	#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
     _modem.~SaraN2();
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
+}
+
+/** Initialise the modem with default parameters:
+ *  AUTOCONNECT = TRUE
+ *  CELL_RESELECTION = TRUE
+ *  SIM_PSM = TRUE
+ *  MODULE_PSM = TRUE
+ * 
+ *  Then attempt to connect to a network for 5 minutes; if this is 
+ *  unsuccessful then turn off the modem and report that status
+ *  back to the application. If it is successful then the modem 
+ *  may not necessarily enter PSM instantly - this is determined by
+ *  T3324/T3412 timer settings
+ * 
+ * @return Inidicates success or failure reason
+ */
+int TP_NBIoT_Interface::start()
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = enable_autoconnect();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = enable_cell_reselection();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = enable_sim_power_save_mode();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = enable_power_save_mode();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		status = reboot_modem();
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		TP_Connection_Status conn_status;
+		int connected = 0;
+		int registered = 0;
+		int psm = 0;
+		status = get_module_network_status(conn_status, connected, registered, psm);
+		time_t start_time = time(NULL);
+
+		/** Attempt to connect and register to the network for 5 minutes. If we fail
+		 *  then turn off the radio to conserve power and let the application decide 
+		 *  what to do
+		 */
+		while(conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_CONNECTED ||
+		      conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_RELEASED ||
+			  conn_status != TP_Connection_Status::PSM_REGISTERED)
+		{
+			status = get_module_network_status(conn_status, connected, registered, psm);
+
+			time_t current_time = time(NULL);
+			if(current_time >= start_time + 300)
+			{
+				status = deactivate_radio();
+				if(status != TP_NBIoT_Interface::NBIOT_OK)
+				{
+					return status;
+				}
+
+				return TP_NBIoT_Interface::FAIL_TO_CONNECT;
+			}
+
+			ThisThread::sleep_for(10000);
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Power-cycle the NB-IoT modem
@@ -421,6 +509,45 @@ int TP_NBIoT_Interface::get_csq(int &power, int &quality)
     }
 
     return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
+/** Return LTE channel number, EARFCN
+ * 
+ * @param &band Address of TP_NBIoT_Band value in which to store
+ *              determined EARFCN
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_band(TP_NBIoT_Band &band)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		SaraN2::Nuestats_t stats;
+
+		status = get_nuestats(stats.data);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		if(stats.parameters.earfcn >= EARFCN_B8_LOW && stats.parameters.earfcn <= EARFCN_B8_HIGH)
+		{
+			band = TP_NBIoT_Interface::TP_NBIoT_Band::BAND_8;
+		}
+		else if(stats.parameters.earfcn >= EARFCN_B20_LOW && stats.parameters.earfcn <= EARFCN_B20_HIGH)
+		{
+			band = TP_NBIoT_Interface::TP_NBIoT_Band::BAND_20;
+		}
+		else 
+		{
+			band = TP_NBIoT_Interface::TP_NBIoT_Band::BAND_UNKNOWN;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Return operation stats, of a given type, of the module
