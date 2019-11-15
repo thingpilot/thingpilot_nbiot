@@ -13,7 +13,6 @@
 /** Includes 
  */
 #include <mbed.h>
-#include "board.h"
 
 /** NB-IoT #defines 
  */
