@@ -127,6 +127,20 @@ class TP_NBIoT_Interface
          */
 		~TP_NBIoT_Interface();
 
+		/** Initialise the modem with default parameters:
+		 *  AUTOCONNECT = TRUE
+		 *  CELL_RESELECTION = TRUE
+		 *  SIM_PSM = TRUE
+		 *  MODULE_PSM = TRUE
+		 * 
+		 *  Then attempt to connect to a network for 5 minutes; if this is 
+		 *  unsuccessful then turn off the modem and report that status
+		 *  back to the application. If it is successful then the modem 
+		 *  may not necessarily enter PSM instantly - this is determined by
+		 *  T3324/T3412 timer settings
+		 * 
+		 * @return Inidicates success or failure reason
+		 */
 		int start();
 
 		/** Power-cycle the NB-IoT modem

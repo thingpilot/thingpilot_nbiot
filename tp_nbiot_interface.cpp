@@ -41,7 +41,20 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 }
 
-
+/** Initialise the modem with default parameters:
+ *  AUTOCONNECT = TRUE
+ *  CELL_RESELECTION = TRUE
+ *  SIM_PSM = TRUE
+ *  MODULE_PSM = TRUE
+ * 
+ *  Then attempt to connect to a network for 5 minutes; if this is 
+ *  unsuccessful then turn off the modem and report that status
+ *  back to the application. If it is successful then the modem 
+ *  may not necessarily enter PSM instantly - this is determined by
+ *  T3324/T3412 timer settings
+ * 
+ * @return Inidicates success or failure reason
+ */
 int TP_NBIoT_Interface::start()
 {
 	int status = -1;
