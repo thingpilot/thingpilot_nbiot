@@ -41,6 +41,42 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
     #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
 }
 
+/** Determine when the modem is ready to recieve AT commands
+  * or timeout if it's unresponsive for longer than timeout_s
+  *
+  * @param timeout_s Timeout period in seconds
+  * @return Indicates success or failure reason  
+  */
+int TP_NBIoT_Interface::ready(uint8_t timeout_s)
+{
+    int status = -1;
+
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        time_t start_time = time(NULL);
+
+        while(true)
+        {
+            status = _modem.at();
+
+            if(status == TP_NBIoT_Interface::NBIOT_OK)
+            {
+                return TP_NBIoT_Interface::NBIOT_OK;
+            }
+
+            time_t current_time = time(NULL);
+            if(current_time >= start_time + timeout_s)
+			{
+				return TP_NBIoT_Interface::FAIL_TO_CONNECT;
+			}
+
+			ThisThread::sleep_for(500);
+        }
+    }
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Initialise the modem with default parameters:
  *  AUTOCONNECT = TRUE
  *  CELL_RESELECTION = TRUE

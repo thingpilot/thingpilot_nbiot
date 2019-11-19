@@ -127,6 +127,14 @@ class TP_NBIoT_Interface
          */
 		~TP_NBIoT_Interface();
 
+        /** Determine when the modem is ready to recieve AT commands
+         * or timeout if it's unresponsive for longer than timeout_s
+         *
+         * @param timeout_s Timeout period in seconds
+         * @return Indicates success or failure reason  
+         */
+        int ready(uint8_t timeout_s = 10);
+
 		/** Initialise the modem with default parameters:
 		 *  AUTOCONNECT = TRUE
 		 *  CELL_RESELECTION = TRUE
