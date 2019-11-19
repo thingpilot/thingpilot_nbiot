@@ -147,9 +147,10 @@ class TP_NBIoT_Interface
 		 *  may not necessarily enter PSM instantly - this is determined by
 		 *  T3324/T3412 timer settings
 		 * 
+         * @param timeout_s Timeout period in seconds
 		 * @return Inidicates success or failure reason
 		 */
-		int start();
+		int start(uint16_t timeout_s = 300);
 
 		/** Power-cycle the NB-IoT modem
 		 * 

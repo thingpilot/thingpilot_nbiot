@@ -88,10 +88,11 @@ int TP_NBIoT_Interface::ready(uint8_t timeout_s)
  *  back to the application. If it is successful then the modem 
  *  may not necessarily enter PSM instantly - this is determined by
  *  T3324/T3412 timer settings
- * 
+ *
+ * @param timeout_s Timeout period in seconds 
  * @return Inidicates success or failure reason
  */
-int TP_NBIoT_Interface::start()
+int TP_NBIoT_Interface::start(uint16_t timeout_s)
 {
 	int status = -1;
 
@@ -145,7 +146,7 @@ int TP_NBIoT_Interface::start()
 			status = get_module_network_status(conn_status, connected, registered, psm);
 
 			time_t current_time = time(NULL);
-			if(current_time >= start_time + 300)
+			if(current_time >= start_time + timeout_s)
 			{
 				status = deactivate_radio();
 				if(status != TP_NBIoT_Interface::NBIOT_OK)
@@ -156,7 +157,7 @@ int TP_NBIoT_Interface::start()
 				return TP_NBIoT_Interface::FAIL_TO_CONNECT;
 			}
 
-			ThisThread::sleep_for(10000);
+			ThisThread::sleep_for(2500);
 		}
 
 		return TP_NBIoT_Interface::NBIOT_OK;
