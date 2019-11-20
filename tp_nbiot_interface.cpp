@@ -11,34 +11,34 @@
 #include "tp_nbiot_interface.h"
 
 
-#if defined (BOARD) && (BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0)
-/** Constructor for the TP_NBIoT_Interface class, specifically when 
- *  using a ublox Sara N2xx. Instantiates an ATCmdParser object
- *  on the heap for comms between microcontroller and modem
- * 
- * @param txu Pin connected to SaraN2 TXD (This is MCU TXU)
- * @param rxu Pin connected to SaraN2 RXD (This is MCU RXU)
- * @param cts Pin connected to SaraN2 CTS
- * @param rst Pin connected to SaraN2 RST
- * @param vint Pin conencted to SaraN2 VINT
- * @param gpio Pin connected to SaraN2 GPIO1
- * @param baud Baud rate for UART between MCU and SaraN2
- */  
-TP_NBIoT_Interface::TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, PinName rst, 
-					       			   PinName vint, PinName gpio, int baud) :
-                                       _modem(txu, rxu, cts, rst, vint, gpio, baud) 
-{
-	
-}
-#endif /* #if defined (BOARD) && (BOARD == ...) */
+#if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0
+	/** Constructor for the TP_NBIoT_Interface class, specifically when 
+	 *  using a ublox Sara N2xx. Instantiates an ATCmdParser object
+	 *  on the heap for comms between microcontroller and modem
+	 * 
+	 * @param txu Pin connected to SaraN2 TXD (This is MCU TXU)
+	 * @param rxu Pin connected to SaraN2 RXD (This is MCU RXU)
+	 * @param cts Pin connected to SaraN2 CTS
+	 * @param rst Pin connected to SaraN2 RST
+	 * @param vint Pin conencted to SaraN2 VINT
+	 * @param gpio Pin connected to SaraN2 GPIO1
+	 * @param baud Baud rate for UART between MCU and SaraN2
+	 */  
+	TP_NBIoT_Interface::TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, PinName rst, 
+										PinName vint, PinName gpio, int baud) :
+										_modem(txu, rxu, cts, rst, vint, gpio, baud) 
+	{
+		
+	}
+#endif /* #if BOARD == ... */
 
 /** Destructor for the TP_NBIoT_Interface class
  */
 TP_NBIoT_Interface::~TP_NBIoT_Interface()
 {
-	#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
-    _modem.~SaraN2();
-    #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
+	#if _COMMS_NBIOT_DRIVER == COMMS_DRIVER_SARAN2
+    	_modem.~SaraN2();
+    #endif /* #if _COMMS_NBIOT_DRIVER == COMMS_DRIVER_SARAN2 */
 }
 
 /** Determine when the modem is ready to recieve AT commands

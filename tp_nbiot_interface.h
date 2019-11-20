@@ -22,11 +22,9 @@
 #define EARFCN_B20_HIGH 6449
 
 
-#if defined (BOARD) && (BOARD == WRIGHT_V1_0_0)
-
-#include "SaraN2Driver.h"
-
-#endif /* #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0) */
+#if BOARD == WRIGHT_V1_0_0
+	#include "SaraN2Driver.h"
+#endif /* #if BOARD == WRIGHT_V1_0_0 */
 
 /** Base class for the Thingpilot NB-IoT interface
  */
@@ -105,23 +103,22 @@ class TP_NBIoT_Interface
             INVALID = 4
 		};
 
-	    #if defined (BOARD) && (BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0)
-		/** Constructor for the TP_NBIoT_Interface class, specifically when 
-		 *  using a ublox Sara N2xx. Instantiates an ATCmdParser object
-		 *  on the heap for comms between microcontroller and modem
-		 * 
-		 * @param txu Pin connected to SaraN2 TXD (This is MCU TXU)
-		 * @param rxu Pin connected to SaraN2 RXD (This is MCU RXU)
-		 * @param cts Pin connected to SaraN2 CTS
-		 * @param rst Pin connected to SaraN2 RST
-		 * @param vint Pin conencted to SaraN2 VINT
-		 * @param gpio Pin connected to SaraN2 GPIO1
-		 * @param baud Baud rate for UART between MCU and SaraN2
-		 */  
-		TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, PinName rst, 
-                           PinName vint, PinName gpio, int baud = 57600);
-
-		#endif /* #if defined (BOARD) && (BOARD == ...) */
+	    #if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0
+			/** Constructor for the TP_NBIoT_Interface class, specifically when 
+			 *  using a ublox Sara N2xx. Instantiates an ATCmdParser object
+			 *  on the heap for comms between microcontroller and modem
+			 * 
+			 * @param txu Pin connected to SaraN2 TXD (This is MCU TXU)
+			 * @param rxu Pin connected to SaraN2 RXD (This is MCU RXU)
+			 * @param cts Pin connected to SaraN2 CTS
+			 * @param rst Pin connected to SaraN2 RST
+			 * @param vint Pin conencted to SaraN2 VINT
+			 * @param gpio Pin connected to SaraN2 GPIO1
+			 * @param baud Baud rate for UART between MCU and SaraN2
+			 */  
+			TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, PinName rst, 
+							PinName vint, PinName gpio, int baud = 57600);
+		#endif /* #if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0 */
 
         /** Destructor for the TP_NBIoT_Interface class
          */
@@ -510,16 +507,12 @@ class TP_NBIoT_Interface
 		 */
 		void dec_to_bin_5_bit(uint8_t multiples, char *binary);
 
-		#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
-		SaraN2 _modem;
-		#endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
-
-		#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
-		int _driver = TP_NBIoT_Interface::SARAN2;
-		#else 
-		int _driver = TP_NBIoT_Interface::UNDEFINED;
-		#endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
-		
+		#if _COMMS_NBIOT_DRIVER == COMMS_DRIVER_SARAN2
+			SaraN2 _modem;
+			int _driver = TP_NBIoT_Interface::SARAN2;
+		#else
+			int _driver = TP_NBIoT_Interface::UNDEFINED;
+		#endif /* #if _COMMS_NBIOT_DRIVER == COMMS_DRIVER_SARAN2 */
 };
 
 
