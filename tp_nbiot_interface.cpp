@@ -1,44 +1,84 @@
 /**
   * @file    tp_nbiot_interface.cpp
-  * @version 0.3.1
+  * @version 0.4.0
   * @author  Adam Mitchell
   * @brief   C++ file of the Thingpilot NB-IoT interface. This interface is hardware agnostic
   *          and depends on the underlying modem drivers exposing an identical interface
   */
+
+/* Don't build if target != below 
+ */
+#if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0 /* #endif at EoF */
 
 /** Includes
  */
 #include "tp_nbiot_interface.h"
 
 
-#if defined (BOARD) && (BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0)
-/** Constructor for the TP_NBIoT_Interface class, specifically when 
- *  using a ublox Sara N2xx. Instantiates an ATCmdParser object
- *  on the heap for comms between microcontroller and modem
- * 
- * @param txu Pin connected to SaraN2 TXD (This is MCU TXU)
- * @param rxu Pin connected to SaraN2 RXD (This is MCU RXU)
- * @param cts Pin connected to SaraN2 CTS
- * @param rst Pin connected to SaraN2 RST
- * @param vint Pin conencted to SaraN2 VINT
- * @param gpio Pin connected to SaraN2 GPIO1
- * @param baud Baud rate for UART between MCU and SaraN2
- */  
-TP_NBIoT_Interface::TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, PinName rst, 
-					       			   PinName vint, PinName gpio, int baud) :
-                                       _modem(txu, rxu, cts, rst, vint, gpio, baud) 
-{
-	
-}
-#endif /* #if defined (BOARD) && (BOARD == ...) */
+#if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0
+	/** Constructor for the TP_NBIoT_Interface class, specifically when 
+	 *  using a ublox Sara N2xx. Instantiates an ATCmdParser object
+	 *  on the heap for comms between microcontroller and modem
+	 * 
+	 * @param txu Pin connected to SaraN2 TXD (This is MCU TXU)
+	 * @param rxu Pin connected to SaraN2 RXD (This is MCU RXU)
+	 * @param cts Pin connected to SaraN2 CTS
+	 * @param rst Pin connected to SaraN2 RST
+	 * @param vint Pin conencted to SaraN2 VINT
+	 * @param gpio Pin connected to SaraN2 GPIO1
+	 * @param baud Baud rate for UART between MCU and SaraN2
+	 */  
+	TP_NBIoT_Interface::TP_NBIoT_Interface(PinName txu, PinName rxu, PinName cts, PinName rst, 
+										PinName vint, PinName gpio, int baud) :
+										_modem(txu, rxu, cts, rst, vint, gpio, baud) 
+	{
+		
+	}
+#endif /* #if BOARD == ... */
 
 /** Destructor for the TP_NBIoT_Interface class
  */
 TP_NBIoT_Interface::~TP_NBIoT_Interface()
 {
-	#if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2)
-    _modem.~SaraN2();
-    #endif /* #if defined (_COMMS_NBIOT_DRIVER) && (_COMMS_NBIOT_DRIVER == SARAN2) */
+	#if _COMMS_NBIOT_DRIVER == COMMS_DRIVER_SARAN2
+    	_modem.~SaraN2();
+    #endif /* #if _COMMS_NBIOT_DRIVER == COMMS_DRIVER_SARAN2 */
+}
+
+/** Determine when the modem is ready to recieve AT commands
+  * or timeout if it's unresponsive for longer than timeout_s
+  *
+  * @param timeout_s Timeout period in seconds
+  * @return Indicates success or failure reason  
+  */
+int TP_NBIoT_Interface::ready(uint8_t timeout_s)
+{
+    int status = -1;
+
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        time_t start_time = time(NULL);
+
+        while(true)
+        {
+            status = _modem.at();
+
+            if(status == TP_NBIoT_Interface::NBIOT_OK)
+            {
+                return TP_NBIoT_Interface::NBIOT_OK;
+            }
+
+            time_t current_time = time(NULL);
+            if(current_time >= start_time + timeout_s)
+			{
+				return TP_NBIoT_Interface::FAIL_TO_CONNECT;
+			}
+
+			ThisThread::sleep_for(500);
+        }
+    }
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
 /** Initialise the modem with default parameters:
@@ -52,10 +92,11 @@ TP_NBIoT_Interface::~TP_NBIoT_Interface()
  *  back to the application. If it is successful then the modem 
  *  may not necessarily enter PSM instantly - this is determined by
  *  T3324/T3412 timer settings
- * 
+ *
+ * @param timeout_s Timeout period in seconds 
  * @return Inidicates success or failure reason
  */
-int TP_NBIoT_Interface::start()
+int TP_NBIoT_Interface::start(uint16_t timeout_s)
 {
 	int status = -1;
 
@@ -109,7 +150,7 @@ int TP_NBIoT_Interface::start()
 			status = get_module_network_status(conn_status, connected, registered, psm);
 
 			time_t current_time = time(NULL);
-			if(current_time >= start_time + 300)
+			if(current_time >= start_time + timeout_s)
 			{
 				status = deactivate_radio();
 				if(status != TP_NBIoT_Interface::NBIOT_OK)
@@ -120,7 +161,7 @@ int TP_NBIoT_Interface::start()
 				return TP_NBIoT_Interface::FAIL_TO_CONNECT;
 			}
 
-			ThisThread::sleep_for(10000);
+			ThisThread::sleep_for(2500);
 		}
 
 		return TP_NBIoT_Interface::NBIOT_OK;
@@ -1494,4 +1535,6 @@ void TP_NBIoT_Interface::dec_to_bin_5_bit(uint8_t multiples, char *binary)
         index--;
     }
 }
+
+#endif /* #if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0 */
 
