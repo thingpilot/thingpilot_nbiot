@@ -22,9 +22,9 @@
 #define EARFCN_B20_HIGH 6449
 
 
-#if BOARD == WRIGHT_V1_0_0
+#if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0
 	#include "SaraN2Driver.h"
-#endif /* #if BOARD == WRIGHT_V1_0_0 */
+#endif /* #if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0 */
 
 /** Base class for the Thingpilot NB-IoT interface
  */
@@ -514,5 +514,3 @@ class TP_NBIoT_Interface
 			int _driver = TP_NBIoT_Interface::UNDEFINED;
 		#endif /* #if _COMMS_NBIOT_DRIVER == COMMS_DRIVER_SARAN2 */
 };
-
-

@@ -6,6 +6,10 @@
   *          and depends on the underlying modem drivers exposing an identical interface
   */
 
+/* Don't build if target != below 
+ */
+#if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0 /* #endif at EoF */
+
 /** Includes
  */
 #include "tp_nbiot_interface.h"
@@ -1531,4 +1535,6 @@ void TP_NBIoT_Interface::dec_to_bin_5_bit(uint8_t multiples, char *binary)
         index--;
     }
 }
+
+#endif /* #if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0 */
 
