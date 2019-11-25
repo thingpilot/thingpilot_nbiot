@@ -1,4 +1,11 @@
 ## Thingpilot NB-IoT Interface Release Notes
+**v0.4.0** *25/11/2019*
+
+- Add functionality to check readiness-state of module
+- Configure .start() timeout period
+- Update preprocessor format to use BOARD macro
+- #ifdef guard around .h include in .cpp so that we don't attempt to build if unsupported target is selected
+
 **v0.3.1** *15/11/2019*
 
 - Add .start() function. This will initialise the modem into a state whereby it will automatically attempt network connection and registration and enter PSM where possible
