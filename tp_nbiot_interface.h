@@ -45,11 +45,12 @@ class TP_NBIoT_Interface
 		 */
 		enum
 		{
-			NBIOT_OK           = 0,
-			DRIVER_UNKNOWN     = 60,
-			EXCEEDS_MAX_VALUE  = 61,
-			INVALID_UNIT_VALUE = 62,
-			FAIL_TO_CONNECT    = 63
+			NBIOT_OK              = 0,
+			DRIVER_UNKNOWN        = 60,
+			EXCEEDS_MAX_VALUE     = 61,
+			INVALID_UNIT_VALUE    = 62,
+			FAIL_TO_CONNECT       = 63,
+            NO_NETWORK_CONNECTION = 64
 		};
 
 		/** LTE Bands
@@ -435,6 +436,13 @@ class TP_NBIoT_Interface
 		 * @return Indicates success or failure reason
 		 */ 
 		int coap_post(char *send_data, char *recv_data, int data_indentifier, int &response_code);
+
+        /** Get the current unix time from Thingpilot server 
+         *
+         * @param &unix_time Address of time_t value in which to store unix timestamp
+         * @return Indicates success or failure reason
+         */
+        int get_unix_time(time_t &unix_time);
 
 		/** Set T3412 timer to multiples of given units
 		 * 

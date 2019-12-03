@@ -1158,6 +1158,43 @@ int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_ind
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Get the current unix time from Thingpilot server 
+ *
+ * @param &unix_time Address of time_t value in which to store unix timestamp
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_unix_time(time_t &unix_time)
+{
+    int status = -1;
+
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        TP_Connection_Status conn_status;
+		int connected, registered, psm;
+
+		status = get_module_network_status(conn_status, connected, registered, psm);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
+        }
+
+		/** If we're not registered to the network then we can't get the time
+		 */
+		if(conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_CONNECTED ||
+           conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_RELEASED ||
+           conn_status != TP_Connection_Status::PSM_REGISTERED)
+		{
+            return TP_NBIoT_Interface::NO_NETWORK_CONNECTION;
+        }
+
+        /* Do some coap magic here to get the unix timestamp */
+        
+        return TP_NBIoT_Interface::NBIOT_OK;   
+    }
+
+    return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Set T3412 timer to multiples of given units
  * 
  * @param unit Enumerated value within T3412_units enum class
