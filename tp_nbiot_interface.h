@@ -1,6 +1,6 @@
 /**
   * @file    tp_nbiot_interface.h
-  * @version 0.3.1
+  * @version 0.4.0
   * @author  Adam Mitchell
   * @brief   Header file of the Thingpilot NB-IoT interface. This interface is hardware agnostic
   *          and depends on the underlying modem drivers exposing an identical interface
@@ -22,9 +22,9 @@
 #define EARFCN_B20_HIGH 6449
 
 
-#if BOARD == WRIGHT_V1_0_0
+#if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0
 	#include "SaraN2Driver.h"
-#endif /* #if BOARD == WRIGHT_V1_0_0 */
+#endif /* #if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0 */
 
 /** Base class for the Thingpilot NB-IoT interface
  */
@@ -434,7 +434,7 @@ class TP_NBIoT_Interface
          *                       will be stored
 		 * @return Indicates success or failure reason
 		 */ 
-		int coap_post(char *send_data, char *recv_data, int data_indentifier, int &response_code);
+		int coap_post(uint8_t *send_data, size_t buffer_len, char *recv_data, int data_indentifier, int &response_code);
 
 		/** Set T3412 timer to multiples of given units
 		 * 
@@ -514,5 +514,3 @@ class TP_NBIoT_Interface
 			int _driver = TP_NBIoT_Interface::UNDEFINED;
 		#endif /* #if _COMMS_NBIOT_DRIVER == COMMS_DRIVER_SARAN2 */
 };
-
-

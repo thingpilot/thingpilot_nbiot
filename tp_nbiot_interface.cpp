@@ -1,10 +1,14 @@
 /**
   * @file    tp_nbiot_interface.cpp
-  * @version 0.3.1
+  * @version 0.4.0
   * @author  Adam Mitchell
   * @brief   C++ file of the Thingpilot NB-IoT interface. This interface is hardware agnostic
   *          and depends on the underlying modem drivers exposing an identical interface
   */
+
+/* Don't build if target != below 
+ */
+#if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0 /* #endif at EoF */
 
 /** Includes
  */
@@ -1124,33 +1128,58 @@ int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_inde
  *                       will be stored
  * @return Indicates success or failure reason
  */ 
-int TP_NBIoT_Interface::coap_post(char *send_data, char *recv_data, int data_indentifier, int &response_code)
+int TP_NBIoT_Interface::coap_post(uint8_t *send_data, size_t buffer_len, char *recv_data, int data_indentifier, int &response_code)
 {
-	int status = -1;
+    int status = -1;
+    if(_driver == TP_NBIoT_Interface::SARAN2)
+    {
+        //todo: load_profile and select_coap_at_interface outside of loop?
+        status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            debug("\r\nError load_profile(SaraN2::COAP_PROFILE_0); %d",status);
+            //  return status;
+        }
 
-	if(_driver == TP_NBIoT_Interface::SARAN2)
-	{
-		status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
-		if(status != TP_NBIoT_Interface::NBIOT_OK)
-		{
-			return status;
-		}
+        status = _modem.select_coap_at_interface();
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            debug("\r\nError select_coap_at_interface(); %d",status);
+            // return status;
+        }
 
-		status = _modem.select_coap_at_interface();
-		if(status != TP_NBIoT_Interface::NBIOT_OK)
-		{
-			return status;
-		}
+        uint8_t send_block_number=0;
+        uint8_t send_more_block=0;
+        uint8_t buff512[512];
+        long done = 0;
+        while (done < buffer_len)
+        {
+            long available = buffer_len - done;
+            if (available>512)
+            {
+                available = 512;
+                send_more_block=1;
+            }
+            else 
+            {
+                send_more_block=0;
+            }
+            memcpy(send_data + done, buff512, available);
+            done += available;
+            
+            debug("\r\nSending");
+            status = _modem.coap_post(buff512, recv_data, data_indentifier, send_block_number, 
+                                    send_more_block, response_code);
+            send_block_number++;
+        
+            if(status != TP_NBIoT_Interface::NBIOT_OK)
+            {
+                debug("\r\nError sending. Response_code %d",response_code);
+                // return status;
+            }
+        }
+    }
 
-		status = _modem.coap_post(send_data, recv_data, data_indentifier, response_code);
-		if(status != TP_NBIoT_Interface::NBIOT_OK)
-		{
-			return status;
-		}
-
-		return TP_NBIoT_Interface::NBIOT_OK;
-	}
-	
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
@@ -1531,4 +1560,6 @@ void TP_NBIoT_Interface::dec_to_bin_5_bit(uint8_t multiples, char *binary)
         index--;
     }
 }
+
+#endif /* #if BOARD == WRIGHT_V1_0_0 || BOARD == DEVELOPMENT_BOARD_V1_1_0 */
 
