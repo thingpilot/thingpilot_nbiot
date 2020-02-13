@@ -192,6 +192,30 @@ int TP_NBIoT_Interface::reboot_modem()
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
 }
 
+/** Is the modem TX/RX circuitry turned on or off? 1 is on, 0 is off
+ * 
+ * @param &status Address of integer value to which to return the status
+ *                value of the radio
+ * @return Indicates success or failure reason
+ */
+int TP_NBIoT_Interface::get_radio_status(int &radio_status)
+{
+	int status = -1;
+
+	if(_driver == TP_NBIoT_Interface::SARAN2)
+	{
+		status = _modem.get_radio_status(radio_status);
+		if(status != TP_NBIoT_Interface::NBIOT_OK)
+		{
+			return status;
+		}
+
+		return TP_NBIoT_Interface::NBIOT_OK;
+	}	
+
+	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
+}
+
 /** Disable TX and RX RF circuits
  * 
  * @return Indicates success or failure reason
