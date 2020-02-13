@@ -155,6 +155,14 @@ class TP_NBIoT_Interface
 		 */
 		int reboot_modem();
 
+		/** Is the modem TX/RX circuitry turned on or off? 1 is on, 0 is off
+		 * 
+		 * @param &status Address of integer value to which to return the status
+		 *                value of the radio
+		 * @return Indicates success or failure reason
+		 */
+		int get_radio_status(int &radio_status);
+
 		/** Disable TX and RX RF circuits
 		 * 
 		 * @return Indicates success or failure reason
