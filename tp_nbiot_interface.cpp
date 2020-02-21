@@ -99,36 +99,44 @@ int TP_NBIoT_Interface::ready(uint8_t timeout_s)
 int TP_NBIoT_Interface::start(uint16_t timeout_s)
 {
 	int status = -1;
-
 	if(_driver == TP_NBIoT_Interface::SARAN2)
 	{
 		status = enable_autoconnect();
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
+            debug("\r\nLine %d, status %d",__LINE__,status);
 			return status;
 		}
 
 		status = enable_cell_reselection();
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
-			return status;
+            status = enable_cell_reselection();
+            if(status != TP_NBIoT_Interface::NBIOT_OK)
+		    {
+                debug("\r\nLine %d, status %d",__LINE__,status);
+                return status;
+            }
 		}
 
 		status = enable_sim_power_save_mode();
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
+            debug("\r\nLine %d, status %d",__LINE__,status);
 			return status;
 		}
 
 		status = enable_power_save_mode();
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
+            debug("\r\nLine %d, status %d",__LINE__,status);
 			return status;
 		}
 
 		status = reboot_modem();
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
+            debug("\r\nLine %d, status %d",__LINE__,status);
 			return status;
 		}
 
@@ -146,13 +154,13 @@ int TP_NBIoT_Interface::start(uint16_t timeout_s)
 		while(true)
 		{
             status = get_module_network_status(conn_status, connected, registered, psm);
-            if (conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_CONNECTED ||
-		        conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_RELEASED ||
-			    conn_status != TP_Connection_Status::PSM_REGISTERED)
-              {
+            if (conn_status == TP_Connection_Status::ACTIVE_REGISTERED_RRC_CONNECTED ||
+		        conn_status == TP_Connection_Status::ACTIVE_REGISTERED_RRC_RELEASED ||
+			    conn_status == TP_Connection_Status::PSM_REGISTERED)
+              {  
                   break;
               }
-			debug("\r\nconn_status %d, connected %d, registered %d, psm %d",conn_status, connected, registered, psm);
+            debug("\r\nconn_status %d, connected %d, registered %d, psm %d",conn_status, connected, registered, psm);
 			time_t current_time = time(NULL);
 			if(current_time >= start_time + timeout_s)
 			{
@@ -929,6 +937,7 @@ int TP_NBIoT_Interface::enable_sim_power_save_mode()
 		status = _modem.configure_ue(SaraN2::NAS_SIM_PSM_ENABLE, SaraN2::TRUE);
 		if(status != TP_NBIoT_Interface::NBIOT_OK)
 		{
+            status = _modem.configure_ue(SaraN2::NAS_SIM_PSM_ENABLE, SaraN2::TRUE);
 			return status;
 		}
 
@@ -1013,7 +1022,6 @@ int TP_NBIoT_Interface::configure_coap(char *ipv4, uint16_t port, char *uri, uin
 		{
 			return status;
 		}
-
 		return TP_NBIoT_Interface::NBIOT_OK;
 	}
 
@@ -1196,8 +1204,8 @@ int TP_NBIoT_Interface::coap_post(uint8_t *send_data, size_t buffer_len, char *r
             memcpy(buff512, send_data+done, available); 
             done += available;
             
-            debug("\r\nSending");
-            status = _modem.coap_post(buff512, recv_data, data_indentifier, send_block_number, 
+            debug("\r\nSending %d",done);
+            status = _modem.coap_post(buff512, done, recv_data, data_indentifier, send_block_number, 
                                     send_more_block, response_code);
             send_block_number++;
         
