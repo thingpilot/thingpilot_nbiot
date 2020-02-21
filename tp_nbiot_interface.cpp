@@ -152,7 +152,7 @@ int TP_NBIoT_Interface::start(uint16_t timeout_s)
               {
                   break;
               }
-			debug("\r\nconn_status %d, connected %d, registered %d, psm %d",conn_status, connected, registered, psm)
+			debug("\r\nconn_status %d, connected %d, registered %d, psm %d",conn_status, connected, registered, psm);
 			time_t current_time = time(NULL);
 			if(current_time >= start_time + timeout_s)
 			{
@@ -1193,7 +1193,7 @@ int TP_NBIoT_Interface::coap_post(uint8_t *send_data, size_t buffer_len, char *r
                 send_more_block=0;
             }
             //memcpy(send_data + done, buff512, available);
-            memcpy(buff512, buffer+done, available); 
+            memcpy(buff512, send_data+done, available); 
             done += available;
             
             debug("\r\nSending");
