@@ -143,12 +143,16 @@ int TP_NBIoT_Interface::start(uint16_t timeout_s)
 		 *  then turn off the radio to conserve power and let the application decide 
 		 *  what to do
 		 */
-		while(conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_CONNECTED ||
-		      conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_RELEASED ||
-			  conn_status != TP_Connection_Status::PSM_REGISTERED)
+		while(true)
 		{
-			status = get_module_network_status(conn_status, connected, registered, psm);
-
+            status = get_module_network_status(conn_status, connected, registered, psm);
+            if (conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_CONNECTED ||
+		        conn_status != TP_Connection_Status::ACTIVE_REGISTERED_RRC_RELEASED ||
+			    conn_status != TP_Connection_Status::PSM_REGISTERED)
+              {
+                  break;
+              }
+			debug("\r\nconn_status %d, connected %d, registered %d, psm %d",conn_status, connected, registered, psm)
 			time_t current_time = time(NULL);
 			if(current_time >= start_time + timeout_s)
 			{
@@ -1162,19 +1166,19 @@ int TP_NBIoT_Interface::coap_post(uint8_t *send_data, size_t buffer_len, char *r
         if(status != TP_NBIoT_Interface::NBIOT_OK)
         {
             debug("\r\nError load_profile(SaraN2::COAP_PROFILE_0); %d",status);
-            //  return status;
+            return status;
         }
 
         status = _modem.select_coap_at_interface();
         if(status != TP_NBIoT_Interface::NBIOT_OK)
         {
             debug("\r\nError select_coap_at_interface(); %d",status);
-            // return status;
+            return status;
         }
 
         uint8_t send_block_number=0;
         uint8_t send_more_block=0;
-        uint8_t buff512[512];
+        uint8_t *buff512= new uint8_t[512];
         long done = 0;
         while (done < buffer_len)
         {
@@ -1188,7 +1192,8 @@ int TP_NBIoT_Interface::coap_post(uint8_t *send_data, size_t buffer_len, char *r
             {
                 send_more_block=0;
             }
-            memcpy(send_data + done, buff512, available);
+            //memcpy(send_data + done, buff512, available);
+            memcpy(buff512, buffer+done, available); 
             done += available;
             
             debug("\r\nSending");
@@ -1198,10 +1203,11 @@ int TP_NBIoT_Interface::coap_post(uint8_t *send_data, size_t buffer_len, char *r
         
             if(status != TP_NBIoT_Interface::NBIOT_OK)
             {
-                debug("\r\nError sending. Response_code %d",response_code);
-                // return status;
+                //debug("\r\nError sending. Response_code %d",response_code);
+                return status;
             }
         }
+        return TP_NBIoT_Interface::NBIOT_OK;
     }
 
 	return TP_NBIoT_Interface::DRIVER_UNKNOWN;
