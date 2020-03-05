@@ -442,7 +442,8 @@ class TP_NBIoT_Interface
          *                       will be stored
 		 * @return Indicates success or failure reason
 		 */ 
-		int coap_post(uint8_t *send_data, size_t buffer_len, char *recv_data, int data_indentifier, int &response_code);
+		int coap_post(uint8_t *send_data, size_t buffer_len, char *recv_data, int data_indentifier,
+                      uint8_t send_block_number, uint8_t send_more_block, int &response_code);
 
 		/** Set T3412 timer to multiples of given units
 		 * 

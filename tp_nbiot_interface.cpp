@@ -1164,7 +1164,8 @@ int TP_NBIoT_Interface::coap_put(char *send_data, char *recv_data, int data_inde
  *                       will be stored
  * @return Indicates success or failure reason
  */ 
-int TP_NBIoT_Interface::coap_post(uint8_t *send_data, size_t buffer_len, char *recv_data, int data_indentifier, int &response_code)
+int TP_NBIoT_Interface::coap_post(uint8_t *send_data, size_t buffer_len, char *recv_data, int data_indentifier,
+                                    uint8_t send_block_number, uint8_t send_more_block, int &response_code)
 {
     int status = -1;
     if(_driver == TP_NBIoT_Interface::SARAN2)
@@ -1173,47 +1174,21 @@ int TP_NBIoT_Interface::coap_post(uint8_t *send_data, size_t buffer_len, char *r
         status = _modem.load_profile(SaraN2::COAP_PROFILE_0);
         if(status != TP_NBIoT_Interface::NBIOT_OK)
         {
-            debug("\r\nError load_profile(SaraN2::COAP_PROFILE_0); %d",status);
             return status;
         }
 
         status = _modem.select_coap_at_interface();
         if(status != TP_NBIoT_Interface::NBIOT_OK)
         {
-            debug("\r\nError select_coap_at_interface(); %d",status);
             return status;
         }
-
-        uint8_t send_block_number=0;
-        uint8_t send_more_block=0;
-        uint8_t *buff512= new uint8_t[512];
-        long done = 0;
-        while (done < buffer_len)
-        {
-            long available = buffer_len - done;
-            if (available>512)
-            {
-                available = 512;
-                send_more_block=1;
-            }
-            else 
-            {
-                send_more_block=0;
-            }
-            //memcpy(send_data + done, buff512, available);
-            memcpy(buff512, send_data+done, available); 
-            done += available;
-            
-            debug("\r\nSending %d",done);
-            status = _modem.coap_post(buff512, done, recv_data, data_indentifier, send_block_number, 
-                                    send_more_block, response_code);
-            send_block_number++;
         
-            if(status != TP_NBIoT_Interface::NBIOT_OK)
-            {
-                //debug("\r\nError sending. Response_code %d",response_code);
-                return status;
-            }
+        status = _modem.coap_post(send_data, buffer_len, recv_data, data_indentifier, send_block_number, 
+                                send_more_block, response_code);
+
+        if(status != TP_NBIoT_Interface::NBIOT_OK)
+        {
+            return status;
         }
         return TP_NBIoT_Interface::NBIOT_OK;
     }
